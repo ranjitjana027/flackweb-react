@@ -1,20 +1,26 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router';
-import { useAuth } from '../hooks/use-auth';
+import { useSelector } from 'react-redux';
+import Loader from './Loader';
 
-export const  LoginRequired= ({children, ...rest})=>{
-    const auth=useAuth();
+const  LoginRequired= ({children, ...rest})=>{
+    const auth=useSelector(state=>state.auth);
+    if(auth.isLoading){
+      return <Loader/>;
+    }
     return (
         <Route
         {...rest}
         render={({location}) =>
         auth.user?children:(
-            <Redirect 
+            <Redirect
             to={{
                 pathname:"/login",
                 state:{ from: location}
             }} />
-            ) 
+            )
         } />
     );
 }
+
+export default LoginRequired;

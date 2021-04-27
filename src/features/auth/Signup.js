@@ -1,35 +1,44 @@
 import React, {useState} from 'react';
 import { useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/use-auth';
-import { Input, Button } from '../FormElements';
+import { Input, Button } from '../../utils/FormElements';
 import '../../stylesheets/auth/auth.scss';
 
-export function Signup(){
+export default function Signup(){
   const [user,setUser]=useState({
     username:'',
     password:'',
-	re_password:'',
-	display_name:''
+  	re_password:'',
+  	display_name:''
   });
   const [info,setInfo]=useState('');
 
-  const auth=useAuth();
   const history=useHistory();
 
   const handleSubmit=(e)=>{
       e.preventDefault();
 	  if(user.password===user.re_password){
-		if(auth.signup(user.username,user.password, user.display_name)){
-			history.push("/login");
-		}
-		else{
-			setInfo("Error while signing up.")
-		}
+		const fd=new FormData();
+		fd.append("username",user.username);
+		fd.append("password", user.password);
+		fd.append("display_name", user.display_name);
+		fetch('/api/signup',{
+		  method:'POST',
+		  body:fd
+		})
+		.then(response=>response.json())
+		.then(data=>{
+			if(data.success){
+				history.push("/login");
+			  }
+			  else{
+				setInfo("Error while signing up.");
+			  }
+		});
 	  }
 	  else{
 		  setInfo("Passwords do not match")
 	  }
-      
+
 
   }
 
@@ -56,7 +65,7 @@ export function Signup(){
 				<form
 				className="signup-form"
 				onSubmit={handleSubmit} >
-					
+
 					<Input
 					id="inputDisplayName"
 					value={user && user.display_name}
@@ -81,7 +90,7 @@ export function Signup(){
 						onChange: handleChange,
 					}} />
 
-				
+
 					<Input
 					id="inputPassword"
 					value={user && user.password}
@@ -109,7 +118,7 @@ export function Signup(){
 					<Button
 					text="Sign Up"
 					type="submit" />
-					
+
 					<div className="form-input">
 						<div className='error-message'>
 							{ info }
@@ -126,7 +135,7 @@ export function Signup(){
 							&copy; 2019-2021
 						</p>
 					</div>
-					
+
 				</form>
 			</div>
 

@@ -1,47 +1,46 @@
 import React, {useState} from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { useAuth } from '../../hooks/use-auth';
-import { Input, Button } from '../FormElements';
+import { useLocation, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { signin } from './authSlice';
+import { Input, Button } from '../../utils/FormElements';
 import '../../stylesheets/auth/auth.scss';
 
-export function Login(){
-  const [user,setUser]=useState({
-    username:'',
-    password:''
-  });
-  const [info,setInfo]=useState("");
+export default function Login(){
+	const [user,setUser]=useState({
+	username:'',
+	password:''
+	});
+	const [info,setInfo]=useState("");
 
-  const auth=useAuth();
-  
-  const location=useLocation();
-  const history=useHistory();
+	const dispatch=useDispatch();
 
-  const { from }= location.state || { from : { pathname :'/'}};
+	const location=useLocation();
 
-  const handleSubmit=(e)=>{
-      e.preventDefault();
-      if(auth.signin(user.username,user.password)){
-          history.replace(from);
-      }
-	  else{
-		  setInfo("No User Found with this Username/Password")
-	  }
+	const { from }= location.state || { from : { pathname :'/'}};
+	const usr=useSelector(state=>state.auth);
+	
+	const handleSubmit=(e)=>{
+		e.preventDefault();
+		dispatch(signin(user));
+	}
 
-  }
+	const handleChange=({target})=>{
+	const name=target.name;
+	const val=target.value;
+	setUser(user=>{
+		return {
+		...user,
+		[name]:val
+		};
+	});
+	};
 
-  const handleChange=({target})=>{
-    const name=target.name;
-    const val=target.value;
-    setUser(user=>{
-      return {
-        ...user,
-        [name]:val
-      };
-    });
-  };
+	if(usr.user){
+		return <Redirect to={from} />
+	}
 
-  return (
-	  	<div className="login-page">
+	return (
+		<div className="login-page">
 			<div>
 				<div className="app-name">
 					FLACK
@@ -63,7 +62,7 @@ export function Login(){
 						required: true,
 						onChange: handleChange,
 					}} />
-				
+
 					<Input
 					id="inputPassWord"
 					value={user && user.password}
@@ -79,7 +78,7 @@ export function Login(){
 					<Button
 					text="Sign In"
 					type="submit" />
-					
+
 					<div className="form-input">
 						<div className='error-message'>
 							{ info }
@@ -96,11 +95,11 @@ export function Login(){
 							&copy; 2019-2021
 						</p>
 					</div>
-					
+
 				</form>
 			</div>
 
-	  	</div>
-  );
+		</div>
+	);
 
 }

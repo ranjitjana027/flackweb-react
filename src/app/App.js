@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Login } from './components/auth/Login.js';
-import { Signup } from './components/auth/Signup.js';
-import { LoginRequired } from './components/LoginRequired.js';
-import { ProvideAuth } from './hooks/use-auth.js';
+import Login from '../features/auth/Login';
+import Signup from '../features/auth/Signup.js';
+import { Dashboard } from '../components/chat/Dashboard';
+import LoginRequired from '../utils/LoginRequired';
+import { ProvideSocket } from '../hooks/use-socket';
 
 function App() {
   return (
-    <ProvideAuth>
       <Switch>
         <Route path="/login">
           <Login />
@@ -17,12 +17,13 @@ function App() {
         </Route>
         <LoginRequired>
           <Route path="/">
-            Dashboard
+            <ProvideSocket>
+              <Dashboard/>
+            </ProvideSocket>
           </Route>
         </LoginRequired>
-        
+
       </Switch>
-    </ProvideAuth>
   );
 }
 
