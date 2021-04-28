@@ -1,14 +1,16 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import '../../stylesheets/chat/dashboard.scss';
-import ChatNav from './ChatNav';
+import SideBar from './SideBar';
+import ChannelList from '../../features/allChannels/ChannelList';
 import ChatMessages from '../../features/chatMessages/ChatMessages';
 
 export function Dashboard(){
     return (
         <div className="grid-container">
             <div className="chat-nav">
-                <ChatNav/>
+                <SideBar />
+                <ChannelList />
             </div>
             <div className="chat-content">
                 <Switch>

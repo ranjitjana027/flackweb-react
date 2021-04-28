@@ -1,44 +1,4 @@
-.header{
-    flex: 0 0 60px;
-    display: flex;
-    align-items: center;
-    background-color: #0a043c;
-    color: white;
 
-    .channel-info{
-        flex: 1 1 100px;
-        display: flex;
-        align-items: center;
-        max-width: calc(100% - 40px );
-        cursor: default;
-
-        .channel-name{
-          padding: 0 2%;
-          margin-left: 5%;
-          max-width: 70%;
-
-          .channel-title{
-            font-size: larger;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-          .channel-id{
-            font-size: small;
-          }
-        }
-
-        .members-count{
-          font-size: medium;
-          color: #b9b7b7;
-        }
-    }
-
-    .exit-group{
-        flex: 0 0 40px;
-        cursor: pointer;
-    }
-}
 
 .message-list{
   flex: 1 1 200px;
@@ -80,6 +40,7 @@
         padding:5px 0 0;
         margin: 0;
         word-break: break-all;
+        white-space: pre-wrap;
       }
 
       .dummy{
@@ -221,45 +182,4 @@ border-radius: 2px;
 }
 }
 
-.chatinputbox{
-    display: grid;
-    grid-template-columns: auto 60px;
-    overflow: hidden;
-    background-color: #efefef;
 
-    .multilineinput{
-      background-color: white;
-      overflow: auto;
-      max-height: 100px;
-      min-height: 40px;
-      position: relative;
-      margin: 5px;
-      border-radius: 30px;
-      border: none;
-      outline: none;
-      padding: 5px 15px;
-
-      &:empty::after{
-        content: "Write your message";
-        position: absolute;
-        top: 5px;
-        left: 15px;
-        cursor:text;
-        color: #8a8a8a;
-      }
-    }
-
-    input {
-        border: none;
-        outline: none;
-        overflow: auto;
-        border-top-left-radius: 20px;
-        border-bottom-left-radius: 20px;
-        padding-left: 20px;
-      }
-
-      button{
-        border: none;
-        cursor: pointer;
-      }
-}

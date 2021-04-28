@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSocket } from '../../hooks/use-socket';
 import { selectAllChannels, selectActiveChannels, loadChannels, removeChannel } from './allChannelsSlice';
 import ChannelLinkCard from './ChannelListCard';
+import '../../stylesheets/chat/channel_list.scss';
 
 function ChannelList(){
     const dispatch=useDispatch();
@@ -10,7 +11,7 @@ function ChannelList(){
 
     useEffect(()=>{
         dispatch(loadChannels());
-    },[]);
+    },[dispatch]);
 
     const socket=useSocket();
     useEffect(()=>{
@@ -20,19 +21,35 @@ function ChannelList(){
         socket.emit("leave all")
       }
     }, [socket])
-    socket.on('join status', () => {
-        dispatch(loadChannels());
-    });
 
-    socket.on('leave status',data=>{
-        if(auth && auth.user.username===data.username){
-            dispatch(removeChannel(data.room));
+    useEffect(()=>{
+        socket.on('join status', () => {
+            dispatch(loadChannels());
+        });
+        
+        return ()=>{
+            socket.removeAllListeners('join status')
         }
-    })
+    },[socket, dispatch])
+    
+    useEffect(()=>{
+        socket.on('leave status',data=>{
+            if(auth && auth.user.username===data.username){
+                dispatch(removeChannel(data.room));
+            }
+        });
+
+        return ()=>{
+            socket.removeAllListeners('leave status');
+        }
+    },[socket, auth, dispatch]);
+
+    
 
     let channels=useSelector(selectAllChannels);
     const activeChannels=useSelector(selectActiveChannels);
-    channels=channels.filter(item=> activeChannels.includes(item.channel_id));
+    if(activeChannels)
+        channels=channels.filter(item=> activeChannels.includes(item.channel_id));
 
     
 
@@ -50,6 +67,9 @@ function ChannelList(){
         }
     }
 
+    if(!channels){
+        return <div style={{ textAlign: 'center'}}>Loading</div>;
+    }
  
 
     return (

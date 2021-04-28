@@ -44,6 +44,8 @@ export function Button(props){
     return (
         <div className="form-input">
             <button
+            { ...props.options }
+            disabled={props.disabled}
             className="form-button" >
                 {props.text}
             </button>

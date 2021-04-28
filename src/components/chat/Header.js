@@ -1,5 +1,7 @@
 import { ExitToApp } from '@material-ui/icons';
 import React from 'react';
+import '../../stylesheets/chat/header.scss';
+
 function Header(props){
     return (
         <div className="header">

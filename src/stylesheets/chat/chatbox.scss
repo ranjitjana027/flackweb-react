@@ -1,0 +1,44 @@
+.chatinputbox{
+    display: grid;
+    grid-template-columns: auto 60px;
+    overflow: hidden;
+    background-color: #efefef;
+
+    .multilineinput{
+      background-color: white;
+      overflow: auto;
+      max-height: 100px;
+      min-height: 40px;
+      position: relative;
+      display: inline-block;
+      white-space: pre-wrap;
+      margin: 5px;
+      border-radius: 30px;
+      border: none;
+      outline: none;
+      padding: 5px 15px;
+
+      &:empty::after{
+        content: "Write your message";
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        cursor:text;
+        color: #8a8a8a;
+      }
+    }
+
+    input {
+        border: none;
+        outline: none;
+        overflow: auto;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        padding-left: 20px;
+      }
+
+      button{
+        border: none;
+        cursor: pointer;
+      }
+}

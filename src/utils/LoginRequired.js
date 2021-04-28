@@ -3,6 +3,7 @@ import { Route, Redirect } from 'react-router';
 import { useSelector } from 'react-redux';
 import Loader from './Loader';
 
+
 const  LoginRequired= ({children, ...rest})=>{
     const auth=useSelector(state=>state.auth);
     if(auth.isLoading){

@@ -1,14 +1,18 @@
-import React, { useRef } from 'react';
+import React, {  useRef } from 'react';
 import ContentEditable from 'react-contenteditable';
 import { Send } from '@material-ui/icons';
 import { useSocket } from '../../hooks/use-socket';
+import '../../stylesheets/chat/chatbox.scss';
 
 function ChatBox(props){
-    const inputMessage=useRef('');
+    const text=useRef('');
 
-    const handleChange=({ target })=>{
+    const handleBlur = () => {
+      console.log(text);
+    };
 
-        inputMessage.current=target.value;
+    const handleChange=(evt)=>{
+        text.current=evt.currentTarget.innerText;
     }
 
     const socket=useSocket();
@@ -16,12 +20,12 @@ function ChatBox(props){
         socket.emit(
             "send message",
             {
-                message:inputMessage.current,
+                message:text.current,
                 room: props.room
             }
         );
-        inputMessage.current="";
-        document.querySelector('.multilineinput').innerText="";
+        text.current='';  
+
     }
 
     return (
@@ -29,7 +33,8 @@ function ChatBox(props){
                 <ContentEditable
                 className="multilineinput"
                 onChange={handleChange}
-                html={inputMessage.current} />
+                onBlur={handleBlur}
+                html={text.current} />
 
                 <button
                 type="submit"

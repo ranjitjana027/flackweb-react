@@ -19,10 +19,25 @@ export const signin= createAsyncThunk(
         
         const data= await response.json();
         if(data.success){
-            return data.user;
+            return {
+                user: data.user,
+                status: "Signed in successfully"
+            };
         }
         else{
-            return false;
+            if(arg){
+                return {
+                    user: false,
+                    status: "username and password didn't match"
+                }
+            }
+            else{
+                return {
+                    user: false,
+                    status: false
+                }
+            }
+            
         }
     }
 )
@@ -54,6 +69,7 @@ export const authSlice = createSlice({
     name:'auth',
     initialState:{
         user: false,
+        status:false,
         isLoading: false,
         hasError: false
     },
@@ -62,7 +78,8 @@ export const authSlice = createSlice({
         [signin.pending] : pending,
         [signin.rejected] : rejected,
         [signin.fulfilled] : ( state, action ) => {
-            state.user=action.payload;
+            state.user=action.payload.user;
+            state.status=action.payload.status;
             state.isLoading=false;
             state.hasError=false;
         },
@@ -71,6 +88,7 @@ export const authSlice = createSlice({
         [signout.fulfilled] : (state, action) =>{
             if(action.payload){
                 state.user=false;
+                state.status=false;
             }
             state.isLoading=false;
             state.hasError=false;

@@ -9,6 +9,7 @@ import { signout } from '../../features/auth/authSlice';
 import { GroupSearch } from '../../features/groupSearch/GroupSearch';
 import { Feedback } from '../Feedback';
 import { Profile } from '../Profile';
+import '../../stylesheets/chat/sidebar.scss';
 
 export default function SideBar(props){
     const [menuSelected,setMenuSelected]=useState(null);

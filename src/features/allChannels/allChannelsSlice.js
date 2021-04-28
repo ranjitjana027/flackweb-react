@@ -58,12 +58,16 @@ export const allChannelsSlice=createSlice({
     }
 })
 
-export const selectAllChannels= state=>Object.values(state.allChannels.channels).sort((b,a)=>new Date(a.last_message?a.last_message.dttm:a.created_on)-new Date(b.last_message?b.last_message.dttm:b.created_on));
+export const selectAllChannels= state=> {
+    if(state.allChannels.channels)
+        return Object.values(state.allChannels.channels).sort((b,a)=>new Date(a.last_message?a.last_message.dttm:a.created_on)-new Date(b.last_message?b.last_message.dttm:b.created_on));
+    return false;
+}
 
 export const selectActiveChannels=state => {
     if(state.allChannels.channels)
         return Object.values(state.allChannels.channels).filter(item => item.isMember).map(item=>item.channel_id);
-    return [];
+    return false;
 }
 
 export const { addChannel, removeChannel, updateLastMessage } = allChannelsSlice.actions; 

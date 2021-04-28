@@ -7,7 +7,7 @@ import ChatBox from './ChatBox';
 import { selectActiveChannels } from '../allChannels/allChannelsSlice';
 import { addNewMessages, loadMessages } from './chatMessagesSlice';
 import { updateLastMessage } from '../allChannels/allChannelsSlice';
-import '../../stylesheets/chat/chat_content.scss';
+import '../../stylesheets/chat/chat_messages.scss';
 
 export default function ChatMessages(){
     const {channel}=useParams();
@@ -21,23 +21,9 @@ export default function ChatMessages(){
 
     useEffect(() => {
         if(!messages){
-            const fd=new FormData();
-            fd.append('roomname',channel.slice(1) );
-            fetch('/api/chats',{
-                method:'POST',
-                body:fd
-            })
-            .then(res=>res.json())
-            .then(data=>{
-                if(data.success){
-                    dispatch(loadMessages({
-                        channel:channel.slice(1) ,
-                        messages:data.message
-                    }))
-                }
-            });
+            dispatch(loadMessages(channel.slice(1)));
         }
-    },[channel]);
+    },[channel, messages, dispatch]);
 
     useEffect(()=>{
         socket.on(
@@ -54,7 +40,13 @@ export default function ChatMessages(){
                 
             }
         );
-    },[ socket])
+        return ()=>{
+            socket.removeAllListeners('receive message')
+        }
+    }, [socket, dispatch]);
+
+    
+
 
     const exitGroup=()=>{
         socket.emit('leave',{
@@ -64,7 +56,7 @@ export default function ChatMessages(){
     }
 
     if(!activeChannels){
-        return (<div>Loading...</div>)
+        return (<div style={{fontSize:'larger'}}>Loading...</div>)
     }
 
 

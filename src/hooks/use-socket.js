@@ -27,10 +27,14 @@ function useProvideSocket(){
   const on=(event,cb) => {
     socket.on(event,cb);
   }
+  const removeAllListeners=event=>{
+    socket.removeAllListeners(event);
+  }
 
   return {
     socket,
     emit,
-    on
+    on,
+    removeAllListeners
   }
 }

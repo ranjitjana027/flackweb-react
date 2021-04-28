@@ -10,14 +10,14 @@ export default function Login(){
 	username:'',
 	password:''
 	});
-	const [info,setInfo]=useState("");
+
 
 	const dispatch=useDispatch();
 
 	const location=useLocation();
 
 	const { from }= location.state || { from : { pathname :'/'}};
-	const usr=useSelector(state=>state.auth);
+	const auth=useSelector(state=>state.auth);
 	
 	const handleSubmit=(e)=>{
 		e.preventDefault();
@@ -35,7 +35,7 @@ export default function Login(){
 	});
 	};
 
-	if(usr.user){
+	if(auth.user){
 		return <Redirect to={from} />
 	}
 
@@ -76,12 +76,16 @@ export default function Login(){
 					}} />
 
 					<Button
+					disabled={auth.isLoading}
+					options={{
+						'data-loading': auth.isLoading
+					}}
 					text="Sign In"
 					type="submit" />
 
 					<div className="form-input">
 						<div className='error-message'>
-							{ info }
+							{ !auth.isLoading && auth.status && auth.status }
 						</div>
 						<div className="info-message">
 						By continuing, you are agree to our Conditions of Use and Privacy Notice.
