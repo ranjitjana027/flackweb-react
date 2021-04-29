@@ -1,1 +1,3 @@
-/api/* https://flackweb-api.herokuapp.com/ 200
+/login https://flackweb-api.herokuapp.com/api/login 200
+/signup https://flackweb-api.herokuapp.com/api/signup 200
+/logout https://flackweb-api.herokuapp.com/api/logout 200
