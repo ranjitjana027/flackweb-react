@@ -1,4 +1,4 @@
-/socket.io/* https://flackweb-api.herokuapp.com/socket.io/:splat 200
+/socket.io/* https://flackweb-api.herokuapp.com/socket.io/:splat
 /api/login https://flackweb-api.herokuapp.com/api/login 200
 /api/signup https://flackweb-api.herokuapp.com/api/signup 200
 /api/logout https://flackweb-api.herokuapp.com/api/logout 200
