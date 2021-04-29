@@ -4,3 +4,4 @@
 /api/channel_list https://flackweb-api.herokuapp.com/api/channel_list 200
 /api/chats  https://flackweb-api.herokuapp.com/api/chats  200
 /api/channels/match_title https://flackweb-api.herokuapp.com/api/channels/match_title 200
+/* /index.html 200
