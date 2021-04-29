@@ -1,7 +1,9 @@
+/socket.io/* https://flackweb-api.herokuapp.com/socket.io/:splat 200
 /api/login https://flackweb-api.herokuapp.com/api/login 200
 /api/signup https://flackweb-api.herokuapp.com/api/signup 200
 /api/logout https://flackweb-api.herokuapp.com/api/logout 200
 /api/channel_list https://flackweb-api.herokuapp.com/api/channel_list 200
 /api/chats  https://flackweb-api.herokuapp.com/api/chats  200
 /api/channels/match_title https://flackweb-api.herokuapp.com/api/channels/match_title 200
+/api/* https://flackweb-api.herokuapp.com/api/:splat 200
 /* /index.html 200
