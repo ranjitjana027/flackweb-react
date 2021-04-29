@@ -1,7 +1,4 @@
-import React, {
-    createContext,
-    useContext
-} from 'react';
+import React, { createContext, useContext } from 'react';
 import io from 'socket.io-client';
 
 
@@ -20,7 +17,7 @@ export function useSocket(){
 }
 
 function useProvideSocket(){
-  const socket=io.connect('http://localhost:3000/');
+  const socket=io.connect('https://flackweb.netlify.app/');
   const emit=(event,cb) => {
     socket.emit(event,cb);
   }
