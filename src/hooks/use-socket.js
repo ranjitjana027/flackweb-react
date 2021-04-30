@@ -18,7 +18,7 @@ export function useSocket(){
 
 function useProvideSocket(){
   const socket=io.connect(process.env.REACT_APP_API_DOMAIN,{
-    transports:['polling','websocket'],
+    transports:['websocket'],
     extraHeaders:{
       'x-access-tokens': localStorage.getItem('flackwebToken'),
       'Access-Control-Allow-Origin':'*',
