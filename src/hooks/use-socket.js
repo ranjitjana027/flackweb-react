@@ -17,7 +17,13 @@ export function useSocket(){
 }
 
 function useProvideSocket(){
-  const socket=io.connect('https://flackweb.netlify.app/');
+  const socket=io.connect(process.env.REACT_APP_API_DOMAIN,{
+    transports:['polling','websocket'],
+    extraHeaders:{
+      'x-access-tokens': localStorage.getItem('flackwebToken'),
+      'Access-Control-Allow-Origin':'*',
+    }
+  });
   const emit=(event,cb) => {
     socket.emit(event,cb);
   }

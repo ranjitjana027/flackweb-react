@@ -21,10 +21,11 @@ function ChatBox(props){
             "send message",
             {
                 message:text.current,
-                room: props.room
+                room: props.room,
+                token: localStorage.getItem('flackwebToken')
             }
         );
-        text.current='';  
+        text.current='';
 
     }
 

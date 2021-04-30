@@ -37,7 +37,7 @@ export default function ChatMessages(){
                     channel_id:data.room_id,
                     last_message: data
                 }));
-                
+
             }
         );
         return ()=>{
@@ -45,12 +45,13 @@ export default function ChatMessages(){
         }
     }, [socket, dispatch]);
 
-    
+
 
 
     const exitGroup=()=>{
         socket.emit('leave',{
-          room: channel.slice(1) 
+          room: channel.slice(1) ,
+          token: localStorage.getItem('flackwebToken')
         });
         history.push("/");
     }

@@ -21,7 +21,7 @@ export default function Signup(){
 		fd.append("username",user.username);
 		fd.append("password", user.password);
 		fd.append("display_name", user.display_name);
-		fetch('/api/signup',{
+		fetch(`${process.env.REACT_APP_API_DOMAIN}/api/signup`,{
 		  method:'POST',
 		  body:fd
 		})

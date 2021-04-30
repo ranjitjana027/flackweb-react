@@ -15,10 +15,14 @@ function ChannelList(){
 
     const socket=useSocket();
     useEffect(()=>{
-      socket.emit("join all");
+      socket.emit("join all",{
+        token: localStorage.getItem('flackwebToken')
+      });
 
       return ()=>{
-        socket.emit("leave all")
+        socket.emit("leave all",{
+          token: localStorage.getItem('flackwebToken')
+        })
       }
     }, [socket])
 
@@ -26,12 +30,12 @@ function ChannelList(){
         socket.on('join status', () => {
             dispatch(loadChannels());
         });
-        
+
         return ()=>{
             socket.removeAllListeners('join status')
         }
     },[socket, dispatch])
-    
+
     useEffect(()=>{
         socket.on('leave status',data=>{
             if(auth && auth.user.username===data.username){
@@ -44,14 +48,14 @@ function ChannelList(){
         }
     },[socket, auth, dispatch]);
 
-    
+
 
     let channels=useSelector(selectAllChannels);
     const activeChannels=useSelector(selectActiveChannels);
     if(activeChannels)
         channels=channels.filter(item=> activeChannels.includes(item.channel_id));
 
-    
+
 
     const formatDate=str =>{
         const d=new Date(str);
@@ -70,12 +74,12 @@ function ChannelList(){
     if(!channels){
         return <div style={{ textAlign: 'center'}}>Loading</div>;
     }
- 
+
 
     return (
         <ul className="channel_list">
             {
-                channels && 
+                channels &&
                 channels.map((item,i)=>(
                     <li key={i}>
                         <ChannelLinkCard

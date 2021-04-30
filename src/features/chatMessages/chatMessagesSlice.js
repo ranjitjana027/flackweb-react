@@ -5,8 +5,12 @@ export const loadMessages= createAsyncThunk(
     async (arg, thunkAPI) => {
         const fd=new FormData();
         fd.append('roomname',arg );
-        const response= await fetch('/api/chats',{
+        const response= await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/chats`,{
             method:'POST',
+            headers:{
+              'Access-Control-Allow-Origin':'*',
+              'x-access-tokens': localStorage.getItem('flackwebToken')
+            },
             body:fd
         });
         const data= await response.json();

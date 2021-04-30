@@ -37,12 +37,16 @@ export function GroupSearch(props){
         if(name==='display_name' && value!=='' && !allSearchKeys.includes(value.toLowerCase()) ){
             let fd=new FormData();
             fd.append('title',value.toLowerCase());
-            fetch('/api/channels/match_title',{
+            fetch(`${process.env.REACT_APP_API_DOMAIN}/api/channels/match_title`,{
                 method:"POST",
+                headers:{
+                  'Access-Control-Allow-Origin':'*',
+                  'x-access-tokens': localStorage.getItem('flackwebToken')
+                },
                 body:fd
             })
             .then(data=>data.json())
-            .then(data=>{ 
+            .then(data=>{
                 if(data.success){
                     dispatch(addSearchResult(data))
                 }
@@ -53,7 +57,8 @@ export function GroupSearch(props){
     const createNewGroup=()=>{
         socket.emit('join',{
         room_id:newGroup.group_id,
-        room: newGroup.display_name
+        room: newGroup.display_name,
+        token: localStorage.getItem('flackwebToken')
         });
         //props.joinGroup(newGroup);
         setNewGroup({
@@ -75,8 +80,9 @@ export function GroupSearch(props){
         e.preventDefault();
     }
 
-    
+
     return (
+      <div className="sidebar-content">
         <div className={props.active?"new-group active":"new-group"}>
             <div className="headline">
                 Create or Join a new group
@@ -104,11 +110,11 @@ export function GroupSearch(props){
                     value={newGroup.group_id}
                     name="group_id"
                     onChange={handleNewGroupInput} />
-                    
+
                     <button onClick={createNewGroup}>Create</button>
                 </div>
                 <div>
-                    
+
                 </div>
             </form>
             <div className="search-result">
@@ -116,10 +122,10 @@ export function GroupSearch(props){
                     searchResults && searchResults.length!==0 && <h3>Available channels</h3>
                 }
                 {
-                    searchResults && 
+                    searchResults &&
                     searchResults.map((item,i)=>(
-                    <div 
-                    key={i} 
+                    <div
+                    key={i}
                     className="search-result-channel" >
                         <div className="channel-name">
                             <div className="channel-title">{item.channel_name}</div>
@@ -131,8 +137,9 @@ export function GroupSearch(props){
                 }
             </div>
         </div>
+      </div>
     );
-        
-        
-        
+
+
+
 }

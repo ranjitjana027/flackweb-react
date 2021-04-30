@@ -2,7 +2,8 @@ import React from 'react';
 import UserImage from '../img/user.jpg';
 export function Profile(props){
     return (
-        <div className={props.active?"profile active":"profile"}>
+        <div className="sidebar-content">
+          <div className={props.active?"profile active":"profile"}>
             <div className="headline">
                 My Profile
             </div>
@@ -26,6 +27,6 @@ export function Profile(props){
                 </table>
             </div>
         </div>
-
+        </div>
     );
 }

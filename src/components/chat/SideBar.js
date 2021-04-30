@@ -107,14 +107,10 @@ export default function SideBar(props){
                         Version 2.0.2021
                     </div>
                 </ul>
-                <div className="sidebar-content" style={{display:menuSelected==null?'none':''}}>
-                    <Profile toggleSidebar={toggleSidebar} active={menuSelected==="Me"} />
-                    <GroupSearch toggleSidebar={toggleSidebar} active={menuSelected==="New Group"} />
-                    <Feedback toggleSidebar={toggleSidebar} active={menuSelected==="Feedback"} />
-                </div>
-                {/* { menuSelected==="Me" && <Profile toggleSidebar={toggleSidebar} /> }
+
+                {menuSelected==="Me" && <Profile toggleSidebar={toggleSidebar} /> }
                 { menuSelected==="New Group" && <GroupSearch toggleSidebar={toggleSidebar}/> }
-                { menuSelected==="Feedback" && <Feedback toggleSidebar={toggleSidebar} /> } */}
+                { menuSelected==="Feedback" && <Feedback toggleSidebar={toggleSidebar} /> }
             </div>
 
 

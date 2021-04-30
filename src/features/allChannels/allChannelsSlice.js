@@ -3,8 +3,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const loadChannels= createAsyncThunk(
     'allChannels/loadChannels',
     async () => {
-        const response= await fetch('/api/channel_list',{
-            method: 'POST'
+        const response= await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/channel_list`,{
+            method: 'POST',
+            headers:{
+              'Access-Control-Allow-Origin':'*',
+              'x-access-tokens': localStorage.getItem('flackwebToken')
+            }
         });
         const data = await response.json();
         if(data.success){
@@ -70,6 +74,5 @@ export const selectActiveChannels=state => {
     return false;
 }
 
-export const { addChannel, removeChannel, updateLastMessage } = allChannelsSlice.actions; 
+export const { addChannel, removeChannel, updateLastMessage } = allChannelsSlice.actions;
 export default allChannelsSlice.reducer;
-
