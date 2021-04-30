@@ -20,12 +20,14 @@ function useProvideSocket(){
   const socket=io.connect(process.env.REACT_APP_API_DOMAIN,{
     transports:['websocket'],
     extraHeaders:{
-      'x-access-tokens': localStorage.getItem('flackwebToken'),
       'Access-Control-Allow-Origin':'*',
     }
   });
-  const emit=(event,cb) => {
-    socket.emit(event,cb);
+  const emit=(event,payload) => {
+    socket.emit(event,{
+      ...payload,
+      token: localStorage.getItem('flackwebToken')
+    });
   }
   const on=(event,cb) => {
     socket.on(event,cb);

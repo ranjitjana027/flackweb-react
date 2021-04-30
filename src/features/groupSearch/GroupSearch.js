@@ -57,10 +57,9 @@ export function GroupSearch(props){
     const createNewGroup=()=>{
         socket.emit('join',{
         room_id:newGroup.group_id,
-        room: newGroup.display_name,
-        token: localStorage.getItem('flackwebToken')
+        room: newGroup.display_name
         });
-        //props.joinGroup(newGroup);
+
         setNewGroup({
         group_id:'',
         display_name:''

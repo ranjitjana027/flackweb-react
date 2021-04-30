@@ -8,7 +8,7 @@ function ChatBox(props){
     const text=useRef('');
 
     const handleBlur = () => {
-      console.log(text);
+      console.log(text.current);
     };
 
     const handleChange=(evt)=>{
@@ -21,8 +21,7 @@ function ChatBox(props){
             "send message",
             {
                 message:text.current,
-                room: props.room,
-                token: localStorage.getItem('flackwebToken')
+                room: props.room
             }
         );
         text.current='';
@@ -40,6 +39,7 @@ function ChatBox(props){
                 <button
                 type="submit"
                 id="submit"
+                title="Send Message"
                 onClick={sendMessage} >
                     <Send />
                 </button>

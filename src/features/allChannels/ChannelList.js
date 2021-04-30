@@ -15,14 +15,10 @@ function ChannelList(){
 
     const socket=useSocket();
     useEffect(()=>{
-      socket.emit("join all",{
-        token: localStorage.getItem('flackwebToken')
-      });
+      socket.emit("join all");
 
       return ()=>{
-        socket.emit("leave all",{
-          token: localStorage.getItem('flackwebToken')
-        })
+        socket.emit("leave all")
       }
     }, [socket])
 
@@ -74,6 +70,9 @@ function ChannelList(){
     if(!channels){
         return <div style={{ textAlign: 'center'}}>Loading</div>;
     }
+    if(channels && channels.length===0){
+      return <div style={{ textAlign: 'center'}}>Join A Channel First</div>
+    }
 
 
     return (
@@ -99,5 +98,5 @@ function ChannelList(){
 
     );
 }
-// container
+
 export default ChannelList;

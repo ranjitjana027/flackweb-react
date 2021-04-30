@@ -50,8 +50,7 @@ export default function ChatMessages(){
 
     const exitGroup=()=>{
         socket.emit('leave',{
-          room: channel.slice(1) ,
-          token: localStorage.getItem('flackwebToken')
+          room: channel.slice(1) 
         });
         history.push("/");
     }

@@ -1,6 +1,10 @@
 import React from 'react';
-import UserImage from '../img/user.jpg';
+import { useSelector } from 'react-redux';
+import UserImage from '../../img/avatar.png';
+
 export function Profile(props){
+    const auth=useSelector(state=> state.auth);
+
     return (
         <div className="sidebar-content">
           <div className={props.active?"profile active":"profile"}>
@@ -17,11 +21,11 @@ export function Profile(props){
                     <tbody>
                         <tr>
                             <th>Display Name</th>
-                            <td>User Name</td>
+                            <td>{auth.user && auth.user.display_name}</td>
                         </tr>
                         <tr>
                             <th>Username/Email</th>
-                            <td>user@example.com</td>
+                            <td>{auth.user && auth.user.username}</td>
                         </tr>
                     </tbody>
                 </table>
