@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import { useLocation, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signin } from './authSlice';
@@ -6,7 +6,7 @@ import { Input, Button } from '../../utils/FormElements';
 import '../../stylesheets/auth/auth.scss';
 
 export default function Login(){
-	const [user,setUser]=useState({
+	const [user,setUser]=React.useState({
 	username:'',
 	password:''
 	});
@@ -14,17 +14,17 @@ export default function Login(){
 
 	const dispatch=useDispatch();
 
-	const location=useLocation();
+	const location: { state: { from: { pathname : string }}}=useLocation();
 
 	const { from }= location.state || { from : { pathname :'/'}};
-	const auth=useSelector(state=>state.auth);
+	const auth=useSelector((state:any)=>state.auth);
 	
-	const handleSubmit=(e)=>{
+	const handleSubmit=(e:React.SyntheticEvent)=>{
 		e.preventDefault();
 		dispatch(signin(user));
 	}
 
-	const handleChange=({target})=>{
+	const handleChange=({target}:React.ChangeEvent<HTMLInputElement>)=>{
 	const name=target.name;
 	const val=target.value;
 	setUser(user=>{

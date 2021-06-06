@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import * as React  from 'react';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
@@ -9,37 +8,42 @@ import { signout } from '../../features/auth/authSlice';
 import { GroupSearch } from '../../features/groupSearch/GroupSearch';
 import { Feedback } from '../Feedback';
 import { Profile } from '../../features/auth/Profile';
+import { OverridableComponent } from '@material-ui/core/OverridableComponent';
+import { SvgIconTypeMap } from '@material-ui/core';
+import { useAppDispatch } from '../../app/hooks';
 import '../../stylesheets/chat/sidebar.scss';
 
-export default function SideBar(props){
-    const [menuSelected,setMenuSelected]=useState(null);
-    const dispatch=useDispatch();
+export default function SideBar(){
+    const [menuSelected,setMenuSelected]=React.useState<string|null>(null);
+    const dispatch=useAppDispatch();
 
-    const menuItems=[
+    const menuItems: [string,string,OverridableComponent<SvgIconTypeMap<{}, "svg">>][]=[
         ['Me','View Profile',AccountCircleIcon],
         ['New Group', 'Join a new group', GroupAddIcon],
         ['Feedback', 'Write to us', RateReviewIcon]
     ];
 
-    const handleClick=(l,e)=>{
+    const handleClick=(l:string,e:React.MouseEvent<HTMLLIElement>)=>{
         setMenuSelected(l);
     }
 
-    const closeSidebar=({target})=>{
-        if(target.classList.contains('sidebar')){
-            target.classList.add('hidden');
+    const closeSidebar=({target}: React.MouseEvent<HTMLDivElement>)=>{
+        if((target as HTMLElement).classList.contains('sidebar')){
+            (target as HTMLElement).classList.add('hidden');
             setMenuSelected(null);
         }
     }
     const toggleSidebar=()=>{
-        const target=document.querySelector('#sidebar');
-        if(target.classList.contains('hidden')){
-            target.classList.remove('hidden');
-        }
-        else{
-            target.classList.add('hidden');
-            setMenuSelected(null);
-        }
+        const target: HTMLElement|null=document.querySelector('#sidebar');
+        if(target != null){
+            if(target.classList.contains('hidden')){
+                target.classList.remove('hidden');
+            }
+            else{
+                target.classList.add('hidden');
+                setMenuSelected(null);
+            }
+    }
     }
 
     return (
@@ -65,12 +69,12 @@ export default function SideBar(props){
                     FLACK
                     </div>
                     {
-                        menuItems.map(([label,title,Icon],i)=>(
+                        menuItems.map(([label,title,Icon]:[string,string,OverridableComponent<SvgIconTypeMap<{}, "svg">>],i)=>(
                             <li
                             key={i}
                             className={menuSelected===label?"menubar-item active":"menubar-item"}
                             title={title}
-                            onClick={handleClick.bind(this,label)} >
+                            onClick={(e)=>handleClick(label,e)} >
                                 <div>
                                     <Icon fontSize="large" />
                                 </div>
@@ -108,9 +112,9 @@ export default function SideBar(props){
                     </div>
                 </ul>
 
-                {menuSelected==="Me" && <Profile toggleSidebar={toggleSidebar} /> }
-                { menuSelected==="New Group" && <GroupSearch toggleSidebar={toggleSidebar}/> }
-                { menuSelected==="Feedback" && <Feedback toggleSidebar={toggleSidebar} /> }
+                {menuSelected==="Me" && <Profile active={true} /> }
+                { menuSelected==="New Group" && <GroupSearch active={true} toggleSidebar={toggleSidebar}/> }
+                { menuSelected==="Feedback" && <Feedback active={true} /> }
             </div>
 
 

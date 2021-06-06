@@ -4,10 +4,11 @@ import { useSocket } from '../../hooks/use-socket';
 import { selectAllChannels, selectActiveChannels, loadChannels, removeChannel } from './allChannelsSlice';
 import ChannelLinkCard from './ChannelListCard';
 import '../../stylesheets/chat/channel_list.scss';
+import { useAppSelector } from '../../app/hooks';
 
 function ChannelList(){
     const dispatch=useDispatch();
-    const auth=useSelector(state=>state.auth);
+    const auth =useAppSelector (state=>state.auth);
 
     useEffect(()=>{
         dispatch(loadChannels());
@@ -15,32 +16,40 @@ function ChannelList(){
 
     const socket=useSocket();
     useEffect(()=>{
-      socket.emit("join all");
+        if(socket!=null)
+            socket.emit("join all");
 
       return ()=>{
-        socket.emit("leave all")
+        if(socket!=null)
+            socket.emit("leave all")
       }
     }, [socket])
 
     useEffect(()=>{
-        socket.on('join status', () => {
-            dispatch(loadChannels());
-        });
+        if(socket!=null){
+            const joinListener= () => {
+                dispatch(loadChannels());
+            };
+            socket.on('join status', joinListener);
 
-        return ()=>{
-            socket.removeAllListeners('join status')
+            return ()=>{
+                socket.offAny(joinListener);
+            }
         }
     },[socket, dispatch])
 
     useEffect(()=>{
-        socket.on('leave status',data=>{
-            if(auth && auth.user.username===data.username){
-                dispatch(removeChannel(data.room));
+        if(socket!=null){
+            const leaveListener=(data:any)=>{
+                if(typeof auth.user != 'boolean' && auth.user.username===data.username){
+                    dispatch(removeChannel(data.room));
+                }
             }
-        });
+            socket.on('leave status',leaveListener);
 
-        return ()=>{
-            socket.removeAllListeners('leave status');
+            return ()=>{
+                socket.offAny(leaveListener);
+            }
         }
     },[socket, auth, dispatch]);
 
@@ -48,14 +57,14 @@ function ChannelList(){
 
     let channels=useSelector(selectAllChannels);
     const activeChannels=useSelector(selectActiveChannels);
-    if(activeChannels)
+    if(typeof activeChannels != 'boolean' && typeof channels!='boolean')
         channels=channels.filter(item=> activeChannels.includes(item.channel_id));
 
 
 
-    const formatDate=str =>{
+    const formatDate=(str:string) =>{
         const d=new Date(str);
-        const diff=new Date()-d;
+        const diff=(new Date()).valueOf()-d.valueOf();
         if(diff<1000*3600*24){
           return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit', 'hour12':true});
         }
@@ -85,7 +94,7 @@ function ChannelList(){
                         to={`/chat/@${item.channel_id}`}
                         channel={item.channel_name}
                         lastMessage={item.last_message ? (
-                        ( (auth.isLoading || (item.last_message.user!==auth.user.display_name) ) ?item.last_message.user:"You")
+                        ( (auth.isLoading || ( typeof auth.user !='boolean' && item.last_message.user!==auth.user.display_name) ) ?item.last_message.user:"You")
                         + " : "+item.last_message.message
                         ) : "No message so far" }
                         lastMessageTime={ item.last_message? formatDate(item.last_message.dttm):formatDate(item.created_on)}

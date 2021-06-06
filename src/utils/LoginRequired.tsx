@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { Route, Redirect } from 'react-router';
-import { useSelector } from 'react-redux';
 import Loader from './Loader';
+import { useAppSelector } from '../app/hooks';
 
 
-const  LoginRequired= ({children, ...rest})=>{
-    const auth=useSelector(state=>state.auth);
+function LoginRequired({children, ...rest}:{children:any,[key:string]:any}){
+    const auth=useAppSelector (state=>state.auth);
     if(auth.isLoading){
       return <Loader/>;
     }

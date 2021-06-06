@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Login from '../features/auth/Login';
-import Signup from '../features/auth/Signup.js';
+import Signup from '../features/auth/Signup';
 import { Dashboard } from '../components/chat/Dashboard';
 import LoginRequired from '../utils/LoginRequired';
 import { ProvideSocket } from '../hooks/use-socket';

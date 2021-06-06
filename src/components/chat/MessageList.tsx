@@ -1,10 +1,24 @@
-import React, { useRef, useEffect, Fragment } from 'react';
+import * as React from 'react';
 
-function MessageList(props){
-    const divRef=useRef(null);
+type PropType={
+    className?:string,
+    messages:any[],
+    auth:{
+        user: boolean | {
+            username: string,
+            display_name: string
+        },
+        status:boolean | string,
+        isLoading: boolean,
+        hasError: boolean
+    }
+}
+
+function MessageList(props:PropType){
+    const divRef=React.useRef<HTMLDivElement|null>(null);
     let defaultDate=new Date(0);
 
-    useEffect(()=>{
+    React.useEffect(()=>{
         if(divRef.current!=null){
             divRef.current.scrollIntoView(
                 {
@@ -38,13 +52,13 @@ function MessageList(props){
                     props.messages.map((message,i)=>{
                         const messageTime=new Date(message.dttm);
 
-                        const messageCard= (<Fragment key={i}>
+                        const messageCard= (<React.Fragment key={i}>
                             { messageTime.toDateString()!==defaultDate.toDateString() ? (<div className="message-list-date">{messageTime.toDateString()}</div>):''}
                         <div 
-                        className={props.auth.user.display_name===message.user?"user-message":"message"}  >
+                        className={ typeof props.auth.user !='boolean' && props.auth.user.display_name===message.user?"user-message":"message"}  >
                             <div className="chat-message">
                                 <div className="sender">
-                                    {props.auth.user.display_name===message.user?'You':message.user}
+                                    { typeof props.auth.user !='boolean' && props.auth.user.display_name===message.user?'You':message.user}
                                 </div>
                                 <div>
                                     <span className="content">
@@ -58,7 +72,7 @@ function MessageList(props){
                                     {messageTime.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit', 'hour12':true})}
                                 </small>
                             </div>
-                        </div> </Fragment> );
+                        </div> </React.Fragment> );
                         defaultDate=messageTime;
                         return messageCard;
                     })

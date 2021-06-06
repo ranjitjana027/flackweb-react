@@ -1,5 +1,4 @@
 import React, { useEffect, Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { Header, MessageList } from '../../components/chat';
 import { useSocket } from '../../hooks/use-socket';
@@ -8,15 +7,21 @@ import { selectActiveChannels } from '../allChannels/allChannelsSlice';
 import { addNewMessages, loadMessages } from './chatMessagesSlice';
 import { updateLastMessage } from '../allChannels/allChannelsSlice';
 import '../../stylesheets/chat/chat_messages.scss';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export default function ChatMessages(){
-    const {channel}=useParams();
-    const dispatch=useDispatch();
-    const messages=useSelector(state=> state.chatMessages[channel.slice(1)]);
-    const channel_info=useSelector(state=> state.allChannels.channels[channel.slice(1)]);
-    const activeChannels=useSelector(selectActiveChannels);
+    const {channel}: { channel: string }=useParams();
+    const dispatch=useAppDispatch();
+    const messages=useAppSelector (state=> state.chatMessages[channel.slice(1)]);
+    const channel_info=useAppSelector (state=> {
+        if (typeof state.allChannels.channels=='boolean'){
+            return false;
+        }
+        return state.allChannels.channels[channel.slice(1)];
+    });
+    const activeChannels=useAppSelector(selectActiveChannels);
     const socket=useSocket();
-    const auth=useSelector(state=>state.auth);
+    const auth=useAppSelector(state=>state.auth);
     const history=useHistory();
 
     useEffect(() => {
@@ -26,9 +31,8 @@ export default function ChatMessages(){
     },[channel, messages, dispatch]);
 
     useEffect(()=>{
-        socket.on(
-            'receive message',
-            (data) => {
+        if(socket!=null){
+            const receiveMessageListener=(data:any) => {
                 dispatch(addNewMessages({
                     channel:data.room_id,
                     messages: [data]
@@ -38,10 +42,12 @@ export default function ChatMessages(){
                     last_message: data
                 }));
 
+            };
+
+            socket.on('receive message', receiveMessageListener);
+            return ()=>{
+                socket.offAny(receiveMessageListener);
             }
-        );
-        return ()=>{
-            socket.removeAllListeners('receive message')
         }
     }, [socket, dispatch]);
 
@@ -49,9 +55,11 @@ export default function ChatMessages(){
 
 
     const exitGroup=()=>{
-        socket.emit('leave',{
-          room: channel.slice(1) 
-        });
+        if(socket!=null){
+            socket.emit('leave',{
+            room: channel.slice(1) 
+            });
+        }
         history.push("/");
     }
 

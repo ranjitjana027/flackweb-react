@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import * as React from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 import { useSocket } from '../../hooks/use-socket';
-import { addSearchResult, selectAllSearchKeys } from '../../features/groupSearch/groupSearchSlice';
+import { addSearchResult, selectAllSearchKeys } from './groupSearchSlice';
 
+type PropType={
+    active: boolean,
+    toggleSidebar: ()=>void
+}
 
-
-export function GroupSearch(props){
-    const [newGroup,setNewGroup]=useState({
+export function GroupSearch(props:PropType){
+    const [newGroup,setNewGroup]=React.useState<{group_id:string, display_name:string}>({
         group_id:'',
         display_name:''
     });
-    const [next,setNext]=useState(false);
+    const [next,setNext]=React.useState<boolean>(false);
 
-    const toggleNext=e=>{
+    const toggleNext=()=>{
         setNext(next=>!next);
     }
 
     const socket=useSocket();
 
-    const searchResults=useSelector(state=>state.groupSearch[newGroup['display_name'].toLowerCase()]);
-    const allSearchKeys=useSelector(selectAllSearchKeys);
+    const searchResults=useAppSelector(state=>state.groupSearch[newGroup['display_name'].toLowerCase()]);
+    const allSearchKeys=useAppSelector(selectAllSearchKeys);
 
-    const dispatch=useDispatch();
+    const dispatch=useAppDispatch() ;
 
-    const handleNewGroupInput=({target})=>{
+    const handleNewGroupInput=({target}:React.ChangeEvent<HTMLInputElement>)=>{
         const name= target.name;
         const value=target.value;
         setNewGroup(prev=>{
@@ -41,7 +44,7 @@ export function GroupSearch(props){
                 method:"POST",
                 headers:{
                   'Access-Control-Allow-Origin':'*',
-                  'x-access-tokens': localStorage.getItem('flackwebToken')
+                  'x-access-tokens': `${localStorage.getItem('flackwebToken')}`
                 },
                 body:fd
             })
@@ -55,10 +58,12 @@ export function GroupSearch(props){
     }
 
     const createNewGroup=()=>{
-        socket.emit('join',{
-        room_id:newGroup.group_id,
-        room: newGroup.display_name
-        });
+        if(socket!=null){
+            socket.emit('join',{
+            room_id:newGroup.group_id,
+            room: newGroup.display_name
+            });
+        }
 
         setNewGroup({
         group_id:'',
@@ -67,15 +72,17 @@ export function GroupSearch(props){
         props.toggleSidebar();
     }
 
-    const joinNewGroup=(title,id)=>{
-        socket.emit('join',{
-            room_id: id,
-            room:title
-        });
+    const joinNewGroup=(title:string,id:string)=>{
+        if(socket!=null){
+            socket.emit('join',{
+                room_id: id,
+                room:title
+            });
+        }
         props.toggleSidebar();
     }
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
     }
 
@@ -122,7 +129,7 @@ export function GroupSearch(props){
                 }
                 {
                     searchResults &&
-                    searchResults.map((item,i)=>(
+                    searchResults.map((item:{channel_id:string, channel_name:string, members_count:number},i:number)=>(
                     <div
                     key={i}
                     className="search-result-channel" >

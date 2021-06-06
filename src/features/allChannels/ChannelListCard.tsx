@@ -1,9 +1,17 @@
-import React from 'react';
+import * as React from 'react';
 import GroupIcon from '@material-ui/icons/Group';
 import PropTypes from 'prop-types';
 import { Link, useRouteMatch } from 'react-router-dom';
 
-function ChannelLinkCard(props){
+type PropType={
+    to:string,
+    channel: string,
+    lastMessageTime:string,
+    lastMessage:string,
+    membersCount:number
+}
+
+function ChannelLinkCard(props:PropType){
     let active =  useRouteMatch({ 
         path:props.to,
         exact: true 

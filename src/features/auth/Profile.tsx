@@ -1,9 +1,13 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import * as React from 'react';
+import { useAppSelector } from '../../app/hooks';
 import UserImage from '../../img/avatar.png';
 
-export function Profile(props){
-    const auth=useSelector(state=> state.auth);
+type profileProp={
+    active: boolean,
+}
+
+export function Profile(props:profileProp): JSX.Element {
+    const auth=useAppSelector((state)=> state.auth);
 
     return (
         <div className="sidebar-content">
@@ -21,11 +25,11 @@ export function Profile(props){
                     <tbody>
                         <tr>
                             <th>Display Name</th>
-                            <td>{auth.user && auth.user.display_name}</td>
+                            <td>{typeof auth.user!='boolean' && auth.user.display_name}</td>
                         </tr>
                         <tr>
                             <th>Username/Email</th>
-                            <td>{auth.user && auth.user.username}</td>
+                            <td>{typeof auth.user!='boolean' && auth.user.username}</td>
                         </tr>
                     </tbody>
                 </table>

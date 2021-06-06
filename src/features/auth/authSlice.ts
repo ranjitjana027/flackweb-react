@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type UserData={
+        username:string,
+        display_name:string
+};
 
 export const autoSignin= createAsyncThunk(
   'auth/autoSignin',
@@ -6,10 +11,10 @@ export const autoSignin= createAsyncThunk(
     const response=await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/auth`,{
       headers:{
         'Access-Control-Allow-Origin':'*',
-        'x-access-tokens': localStorage.getItem('flackwebToken')
+        'x-access-tokens': `${localStorage.getItem('flackwebToken')}` 
       }
     });
-    const data= await response.json();
+    const data: { success:boolean, user:UserData}= await response.json();
     if(data.success){
       return {
           user: data.user,
@@ -27,7 +32,7 @@ export const autoSignin= createAsyncThunk(
 
 export const signin= createAsyncThunk(
     'auth/signin',
-    async (arg, thunkAPI) => {
+    async (arg : { username: string, password: string }, thunkAPI) => {
           const fd=new FormData();
           fd.append("username",arg.username);
           fd.append("password", arg.password);
@@ -38,7 +43,7 @@ export const signin= createAsyncThunk(
               },
               body:fd
           });
-        const data= await response.json();
+        const data:{ success:boolean, user:UserData, token: string}= await response.json();
         if(data.success){
           localStorage.setItem('flackwebToken',data.token);
             return {
@@ -70,53 +75,65 @@ export const signout =createAsyncThunk(
     }
 )
 
-const pending = state => {
+const pending = (state: AuthState) => {
     state.isLoading=true;
     state.hasError= false;
 }
 
-const rejected = state => {
+const rejected = (state:AuthState) => {
     state.isLoading=false;
     state.hasError=true;
 }
 
+type AuthState={
+    user: boolean | {
+        username: string,
+        display_name: string
+    },
+    status:boolean | string,
+    isLoading: boolean,
+    hasError: boolean
+}
+
+const initialState: AuthState={
+    user: false,
+    status:false,
+    isLoading: false,
+    hasError: false
+}
+
 export const authSlice = createSlice({
     name:'auth',
-    initialState:{
-        user: false,
-        status:false,
-        isLoading: false,
-        hasError: false
-    },
+    initialState,
     reducers:{},
-    extraReducers: {
-        [signin.pending] : pending,
-        [signin.rejected] : rejected,
-        [signin.fulfilled] : ( state, action ) => {
+    extraReducers: (builder) => {
+        builder.addCase(signin.pending, pending);
+        builder.addCase(signin.rejected, rejected);
+        builder.addCase(signin.fulfilled,( state: AuthState, action: PayloadAction<{user: boolean | UserData , status: boolean | string}> ) => { 
             state.user=action.payload.user;
             state.status=action.payload.status;
             state.isLoading=false;
             state.hasError=false;
-        },
-        [autoSignin.pending] : pending,
-        [autoSignin.rejected] : rejected,
-        [autoSignin.fulfilled] : ( state, action ) => {
+        });
+        builder.addCase(autoSignin.pending, pending);
+        builder.addCase(autoSignin.rejected, rejected);
+        builder.addCase(autoSignin.fulfilled,( state: AuthState, action: PayloadAction<{status:boolean| string, user: boolean | UserData }> ) => {
             state.user=action.payload.user;
             state.status=action.payload.status;
             state.isLoading=false;
             state.hasError=false;
-        },
-        [signout.pending] : pending,
-        [signout.rejected] : rejected,
-        [signout.fulfilled] : (state, action) =>{
+        });
+        builder.addCase(signout.pending, pending);
+        builder.addCase(signout.rejected, rejected);
+        builder.addCase(signout.fulfilled , (state, action) =>{
             if(action.payload){
                 state.user=false;
                 state.status=false;
             }
             state.isLoading=false;
             state.hasError=false;
-        }
-    }
+        });
+    },
 })
 
 export default authSlice.reducer;

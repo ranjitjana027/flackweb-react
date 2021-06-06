@@ -1,20 +1,20 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Input, Button } from '../../utils/FormElements';
 import '../../stylesheets/auth/auth.scss';
 
 export default function Signup(){
-  const [user,setUser]=useState({
+  const [user,setUser]=React.useState({
     username:'',
     password:'',
   	re_password:'',
   	display_name:''
   });
-  const [info,setInfo]=useState('');
+  const [info,setInfo]=React.useState<string>('');
 
   const history=useHistory();
 
-  const handleSubmit=(e)=>{
+  const handleSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
       e.preventDefault();
 	  if(user.password===user.re_password){
 		const fd=new FormData();
@@ -42,7 +42,7 @@ export default function Signup(){
 
   }
 
-  const handleChange=({target})=>{
+  const handleChange=({target}: React.ChangeEvent<HTMLInputElement>)=>{
     const name=target.name;
     const val=target.value;
     setUser(user=>{

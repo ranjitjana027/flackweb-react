@@ -1,8 +1,8 @@
+import * as React from 'react';
 import { ExitToApp } from '@material-ui/icons';
-import React from 'react';
 import '../../stylesheets/chat/header.scss';
 
-function Header(props){
+function Header(props: any){
     return (
         <div className="header">
             <div className="channel-info">
