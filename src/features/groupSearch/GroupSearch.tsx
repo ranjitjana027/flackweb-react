@@ -1,4 +1,4 @@
-import { Add, ArrowBackIos, ArrowForwardIos, Block, Check, ErrorOutline} from '@material-ui/icons';
+import { Add, ArrowBackIos, ArrowForwardIos, Block, Check, Warning} from '@material-ui/icons';
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
@@ -38,9 +38,9 @@ export function GroupSearch(props:{toggleSidebar:()=>void}){
         }
         });
 
-        if(name==='display_name' && value!=='' && !allSearchKeys.includes(value.toLowerCase()) ){
+        if(name==='display_name' && value.trim()!=='' && !allSearchKeys.includes(value.toLowerCase()) ){
             let fd=new FormData();
-            fd.append('title',value.toLowerCase());
+            fd.append('title',value.trim().toLowerCase());
             fetch(`${process.env.REACT_APP_API_DOMAIN}/api/channels/match_title`,{
                 method:"POST",
                 headers:{
@@ -56,9 +56,22 @@ export function GroupSearch(props:{toggleSidebar:()=>void}){
                 }
             })
         }
-        else if(name==='group_id' && value!==''){
-            console.log("API required");
-            setAvailable(true);
+        else if(name==='group_id' && value.trim()!==''){
+            
+            let fd=new FormData();
+            fd.append('id',value.trim());
+            fetch(`${process.env.REACT_APP_API_DOMAIN}/api/channels/match_id`,{
+                method:"POST",
+                headers:{
+                  'Access-Control-Allow-Origin':'*',
+                  'x-access-tokens': `${localStorage.getItem('flackwebToken')}`
+                },
+                body:fd
+            })
+            .then(data=>data.json())
+            .then(data=>{
+                setAvailable(!data.success);
+            })
         }
     }
 
@@ -132,8 +145,8 @@ export function GroupSearch(props:{toggleSidebar:()=>void}){
                     { newGroup.group_id!==''  &&
                     <div 
                     className="button" 
-                    onClick={createNewGroup} >
-                        { available?<Check/>:<ErrorOutline/>}
+                     >
+                        { available?<Check onClick={createNewGroup}/>:<Warning/>}
                     </div>
                     }
                 </div>
