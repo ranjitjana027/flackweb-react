@@ -4,8 +4,7 @@ import { Header, MessageList } from '../../components/chat';
 import { useSocket } from '../../hooks/use-socket';
 import ChatBox from './ChatBox';
 import { selectActiveChannels } from '../allChannels/allChannelsSlice';
-import { addNewMessages, loadMessages } from './chatMessagesSlice';
-import { updateLastMessage } from '../allChannels/allChannelsSlice';
+import { loadMessages } from './chatMessagesSlice';
 import '../../stylesheets/chat/chat_messages.scss';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
@@ -24,34 +23,16 @@ export default function ChatMessages(){
     const auth=useAppSelector(state=>state.auth);
     const history=useHistory();
 
+
     useEffect(() => {
         if(!messages){
             dispatch(loadMessages(channel.slice(1)));
         }
     },[channel, messages, dispatch]);
 
-    useEffect(()=>{
-        if(socket!=null){
-            const receiveMessageListener=(data:any) => {
-                dispatch(addNewMessages({
-                    channel:data.room_id,
-                    messages: [data]
-                }));
-                dispatch(updateLastMessage({
-                    channel_id:data.room_id,
-                    last_message: data
-                }));
-
-            };
-
-            socket.on('receive message', receiveMessageListener);
-            return ()=>{
-                socket.offAny(receiveMessageListener);
-            }
-        }
-    }, [socket, dispatch]);
-
-
+    const goBack=()=>{
+        history.goBack();
+    }
 
 
     const exitGroup=()=>{
@@ -64,12 +45,12 @@ export default function ChatMessages(){
     }
 
     if(!activeChannels){
-        return (<div style={{fontSize:'larger'}}>Loading...</div>)
+        return (<div className="initial" style={{fontSize:'larger'}}>Loading...</div>)
     }
 
 
     if( activeChannels && !activeChannels.includes(channel.slice(1))){
-        return (<div>
+        return (<div className="initial">
             Join first to see chat messages
         </div>)
     }
@@ -78,6 +59,7 @@ export default function ChatMessages(){
         <Fragment>
             <Header
             channel_info={channel_info}
+            goBack={goBack}
             exitGroup={exitGroup} />
             <MessageList
             className="message-list"

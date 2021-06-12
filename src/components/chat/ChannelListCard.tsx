@@ -1,7 +1,5 @@
-import * as React from 'react';
-import GroupIcon from '@material-ui/icons/Group';
-import PropTypes from 'prop-types';
 import { Link, useRouteMatch } from 'react-router-dom';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 
 type PropType={
     to:string,
@@ -20,7 +18,7 @@ function ChannelLinkCard(props:PropType){
     return (
         <Link to={props.to} className={active?'active':''} >
             <div className="channel-icon">
-                <GroupIcon/>
+                <PeopleAltIcon/>
             </div>
             <div className="channel-details">
                 <div className="channel-name">
@@ -42,13 +40,4 @@ function ChannelLinkCard(props:PropType){
     );
 }
 
-ChannelLinkCard.propTypes={
-    to: PropTypes.string,
-    channel: PropTypes.string,
-    lastMessage: PropTypes.string,
-    lastMessageTime: PropTypes.string,
-    membersCount: PropTypes.number
-}
-
-//component
 export default ChannelLinkCard;

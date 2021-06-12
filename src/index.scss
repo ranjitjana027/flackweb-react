@@ -15,3 +15,8 @@ code {
 *, *::after, *::before{
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: 'Comfortaa' , cursive;
+  src: url('./assets/fonts/comfortaa/static/Comfortaa-Regular.ttf');
+}

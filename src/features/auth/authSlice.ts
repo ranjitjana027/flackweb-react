@@ -32,20 +32,22 @@ export const autoSignin= createAsyncThunk(
 
 export const signin= createAsyncThunk(
     'auth/signin',
-    async (arg : { username: string, password: string }, thunkAPI) => {
-          const fd=new FormData();
-          fd.append("username",arg.username);
-          fd.append("password", arg.password);
-          const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/login`,{
-              method:'POST',
-              headers:{
-                'Access-Control-Allow-Origin':'*'
-              },
-              body:fd
-          });
+    async (arg : { username: string, password: string, remember:boolean }, thunkAPI) => {
+        localStorage.setItem('flackwebRememberUsername',`${arg.remember}`);
+        const fd=new FormData();
+        fd.append("username",arg.username);
+        fd.append("password", arg.password);
+        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/login`,{
+            method:'POST',
+            headers:{
+            'Access-Control-Allow-Origin':'*'
+            },
+            body:fd
+        });
         const data:{ success:boolean, user:UserData, token: string}= await response.json();
         if(data.success){
           localStorage.setItem('flackwebToken',data.token);
+          localStorage.setItem('flackwebUsername',arg.username);
             return {
                 user: data.user,
                 status: "Signed in successfully"

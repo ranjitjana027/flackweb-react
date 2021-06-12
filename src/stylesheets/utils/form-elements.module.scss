@@ -1,0 +1,139 @@
+$color: black;
+$bg-color: white;
+
+.container {
+  display: flex;
+  margin: 10px;
+  height: auto;
+  border: solid 1px;
+  border-radius: 5px;
+  background-color: $bg-color;
+
+}
+
+
+.icon{
+  padding: 5px 0 5px 5px;
+  flex: 25px 0 0;
+  align-self: flex-end;  
+  color: $color;
+}
+
+.input{
+  position: relative;
+  flex: 100px 1 1;
+
+  input {
+    font-size: 1rem;
+    width: 100%;
+    padding: 13px 8px;
+    border:none;
+    outline: none;
+    transition: padding 0.1s;
+    letter-spacing: 0.05rem;
+
+    &::placeholder {
+      color: transparent;
+    }
+  }
+
+  label {
+    position: absolute;
+    display: block;
+    padding: 13px 8px;
+    width: fit-content;
+    color: $color;
+    top: 0;
+    transition: padding 0.1s;
+    letter-spacing: 0.8px;
+    cursor: text;
+    user-select: none;
+    opacity: 0.95;
+  }
+}
+
+
+
+.focus {
+  padding: 21px 8px 5px !important;
+}
+
+.inputFocus {
+  padding: 4px 8px !important;
+  font-size: 12.8px !important;
+  opacity: 1;
+  /*font-weight: 100 !important;*/
+}
+
+.button{
+  display: block;
+  margin: 10px;
+  height: auto;
+  position: relative;
+
+  button{
+    background: $bg-color;
+    border: 1px solid #0a9fda;
+    color: $color;
+    outline: none;
+    width: 100%;
+    padding: 0.75rem;
+    transition: background-color 0.15s;
+    font-size: 1rem;
+    border-radius: 5px;
+    position: relative;
+
+    &:not(:disabled):hover{
+        cursor: pointer;
+        background-color: $color;
+        color: $bg-color;
+    }
+
+    &:disabled{
+        color: #bababa;
+    }
+
+
+    &[data-loading="true"]{
+        color: transparent;
+
+        // &::after{
+        //     content: ' ';
+        //     position: absolute;
+        //     margin: auto;
+        //     color:$color;
+        //     height: 30px;
+        //     width: 30px;
+        //     left: 0;
+        //     right: 0;
+        //     top: 0;
+        //     bottom: 0;
+        //     border: dashed 2px;
+            
+        //     border-radius: 50%;
+        //     animation: rotation 1s linear infinite;
+        // }
+    }
+
+
+    @keyframes rotation {
+        0%{
+            transform: rotate(0deg);
+        }
+        100%{
+            transform: rotate(360deg);
+        }
+    }
+  }
+}
+
+.checkbox{
+  display: block;
+  position: relative;
+  margin: 10px;
+  height: auto;
+
+  label{
+    margin-left: 5px;
+  }
+}

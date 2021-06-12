@@ -1,40 +1,20 @@
-import * as React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import UserImage from '../../img/avatar.png';
+import styles from '../../stylesheets/auth/profile.module.scss';
 
-type profileProp={
-    active: boolean,
-}
 
-export function Profile(props:profileProp): JSX.Element {
+export function Profile(): JSX.Element {
     const auth=useAppSelector((state)=> state.auth);
 
     return (
-        <div className="sidebar-content">
-          <div className={props.active?"profile active":"profile"}>
-            <div className="headline">
-                My Profile
-            </div>
-            <div className="profile-pic">
+        <div className={styles.profile}>
+            <figure>
                 <img
                 src={UserImage}
                 alt="profile-pic"/>
-            </div>
-            <div className="profile-details">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Display Name</th>
-                            <td>{typeof auth.user!='boolean' && auth.user.display_name}</td>
-                        </tr>
-                        <tr>
-                            <th>Username/Email</th>
-                            <td>{typeof auth.user!='boolean' && auth.user.username}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                <figcaption><b>{typeof auth.user!='boolean' && auth.user.display_name}</b></figcaption>
+                <figcaption>{typeof auth.user!='boolean' && auth.user.username}</figcaption>
+            </figure>
         </div>
     );
 }

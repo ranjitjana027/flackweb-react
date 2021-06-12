@@ -1,8 +1,17 @@
 import * as React from 'react';
 
+type Message={
+    dttm:string,
+    message: string,
+    mid:number,
+    room: string,
+    room_id:string,
+    user:string
+}
+
 type PropType={
     className?:string,
-    messages:any[],
+    messages:Message[],
     auth:{
         user: boolean | {
             username: string,
@@ -39,6 +48,22 @@ function MessageList(props:PropType){
                         margin:'0'
                     }} >
                         Loading...
+                    </p>
+                </div>
+
+            </div>
+        );
+    }
+    else if(props.messages.length===0){
+        return (
+            <div
+            className={props.className} >
+                <div className="interstitial-message">
+                    <p
+                    style={{
+                        margin:'0'
+                    }} >
+                        No message so far
                     </p>
                 </div>
 

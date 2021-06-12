@@ -1,0 +1,54 @@
+$bg-color: black;
+$color: white;
+
+body{
+    background: linear-gradient(to top left, #33cccc 0%, #3366ff 100%);
+}
+
+.container{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: $color;
+    width: 100%;
+    min-height: 100vh;
+    max-width:400px;
+    padding: calc(max(40px,5%)) 0;
+    margin: auto;
+
+    a{
+        color: $color;
+
+        &:hover{
+            color: $bg-color;
+        }
+    }
+    
+}
+
+.app{
+    font-size: 1.5em;
+    width: 100%;
+}
+
+.app, .text, .error{
+    text-align: center;
+}
+
+.form{
+    margin-top: 5%;
+}
+
+.section {
+    display: block;
+    position: relative;
+    margin: 10px;
+    height: auto;
+}
+
+.info{
+    padding-top: 10px;
+}
+
+.error{
+    color: red;
+    text-align: center;
+}

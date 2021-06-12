@@ -2,16 +2,16 @@ ul.channel_list{
     margin: 0;
     padding: 0;
     overflow: auto;
+    border-top:solid 1px #e0e0e0;
 
     li a{
         background-color: #fff;
         list-style-type: none;
         margin: 0;
-        padding: 5px;
-        // border-top: seashell solid;
+        padding: 5px 10px;
         height: 60px;
         text-decoration: none;
-        color: navy;
+        color: black;
         text-align: justify;
         display: flex;
         align-items: center;
@@ -30,7 +30,8 @@ ul.channel_list{
             overflow: auto;
 
             .channel-name{
-                font-size: large;
+                font-size: larger;
+                font-weight: 500;
             }
 
             .channel-name, .last-message{

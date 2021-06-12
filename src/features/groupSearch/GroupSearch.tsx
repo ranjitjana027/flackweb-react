@@ -1,20 +1,20 @@
+import { Add, ArrowBackIos, ArrowForwardIos, Block, Check, ErrorOutline} from '@material-ui/icons';
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 import { useSocket } from '../../hooks/use-socket';
+import { Input } from '../../utils/FormElements';
+import { selectActiveChannels } from '../allChannels/allChannelsSlice';
 import { addSearchResult, selectAllSearchKeys } from './groupSearchSlice';
 
-type PropType={
-    active: boolean,
-    toggleSidebar: ()=>void
-}
 
-export function GroupSearch(props:PropType){
+export function GroupSearch(props:{toggleSidebar:()=>void}){
     const [newGroup,setNewGroup]=React.useState<{group_id:string, display_name:string}>({
         group_id:'',
         display_name:''
     });
     const [next,setNext]=React.useState<boolean>(false);
+    const [available,setAvailable]=React.useState<boolean>(true);
 
     const toggleNext=()=>{
         setNext(next=>!next);
@@ -24,6 +24,7 @@ export function GroupSearch(props:PropType){
 
     const searchResults=useAppSelector(state=>state.groupSearch[newGroup['display_name'].toLowerCase()]);
     const allSearchKeys=useAppSelector(selectAllSearchKeys);
+    const activeChannels=useAppSelector(selectActiveChannels);
 
     const dispatch=useAppDispatch() ;
 
@@ -54,6 +55,10 @@ export function GroupSearch(props:PropType){
                     dispatch(addSearchResult(data))
                 }
             })
+        }
+        else if(name==='group_id' && value!==''){
+            console.log("API required");
+            setAvailable(true);
         }
     }
 
@@ -88,36 +93,49 @@ export function GroupSearch(props:PropType){
 
 
     return (
-      <div className="sidebar-content">
-        <div className={props.active?"new-group active":"new-group"}>
-            <div className="headline">
-                Create or Join a new group
-            </div>
+        <div className="new-group">
             <form
             className="new-group-form"
             onSubmit={handleSubmit} >
                 <div className="form-section">
-                    <input
-                    readOnly={next}
-                    placeholder="Group Display Name"
-                    name="display_name"
+                    <Input
+                    id="display_name"
+                    label="Group Name"
                     value={newGroup.display_name}
-                    onChange={handleNewGroupInput} />
-                    <button onClick={toggleNext}>
-                        { next? 'Back' :'Next'}
-                    </button>
+                    options={{
+                        readOnly:next,
+                        autoComplete:"off",
+                        name:"display_name",
+                        onChange:handleNewGroupInput
+                    }}  />
+                    { newGroup.display_name!=='' &&
+                    <div 
+                    className="button"
+                    onClick={toggleNext} >
+                        { next? <ArrowBackIos/>:<ArrowForwardIos/>}
+                    </div>
+                    }
                 </div>
                 <div style={{
                     display: next?'':'none'
                 }}
                 className="form-section" >
-                    <input
-                    placeholder="Group ID"
+                    <Input
+                    id="group_id"
+                    label="Group ID"
                     value={newGroup.group_id}
-                    name="group_id"
-                    onChange={handleNewGroupInput} />
-
-                    <button onClick={createNewGroup}>Create</button>
+                    options={{
+                        name:"group_id",
+                        autoComplete:"off",
+                        onChange:handleNewGroupInput
+                    }} />
+                    { newGroup.group_id!==''  &&
+                    <div 
+                    className="button" 
+                    onClick={createNewGroup} >
+                        { available?<Check/>:<ErrorOutline/>}
+                    </div>
+                    }
                 </div>
                 <div>
 
@@ -125,10 +143,10 @@ export function GroupSearch(props:PropType){
             </form>
             <div className="search-result">
                 {
-                    searchResults && searchResults.length!==0 && <h3>Available channels</h3>
+                    searchResults &&  searchResults.length!==0 && <h3>Available channels</h3>
                 }
                 {
-                    searchResults &&
+                    searchResults && 
                     searchResults.map((item:{channel_id:string, channel_name:string, members_count:number},i:number)=>(
                     <div
                     key={i}
@@ -138,12 +156,16 @@ export function GroupSearch(props:PropType){
                             <div className="channel-id">{`@${item.channel_id}`}</div>
                         </div>
                         <div className="channel-members-count">{item.members_count} members</div>
-                        <button onClick={()=>joinNewGroup(item.channel_name,item.channel_id)}>Join</button>
+                        <button 
+                        disabled={typeof activeChannels!='boolean' && activeChannels.includes(item.channel_id)}
+                        onClick={()=>joinNewGroup(item.channel_name,item.channel_id)} >
+                            { !(typeof activeChannels!='boolean' && activeChannels.includes(item.channel_id))? <Add/>:<Block/>}
+                        </button>
                     </div>))
                 }
             </div>
         </div>
-      </div>
+      
     );
 
 

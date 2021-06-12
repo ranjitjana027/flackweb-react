@@ -1,6 +1,5 @@
-import * as React from 'react';
 import { Route, Redirect } from 'react-router';
-import Loader from './Loader';
+import { Loader}  from './Loader';
 import { useAppSelector } from '../app/hooks';
 
 

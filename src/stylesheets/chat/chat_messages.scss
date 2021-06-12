@@ -3,15 +3,18 @@
 .message-list{
   flex: 1 1 200px;
   overflow: auto;
+  background: linear-gradient(45deg, #4caf50, #ffffff00 70.71% ), linear-gradient(165deg, #2196f3, #ffffff00 70.71% ), linear-gradient(225deg, #ffeb3b, #ffffff00 70.71% );
 
   .message-list-date{
-    /* width: fit-content; */
-    /* background: aliceblue; */
-    color: #00e2ff;
-    margin: 5px;
+    width: fit-content;
+    background: palegoldenrod;
+    color: #9c27b0;
+    margin: 5px auto;
     text-align: center;
-    /* border-radius: 100%; */
     font-size: smaller;
+    justify-content: right;
+    padding: 2px 5px;
+    border-radius: 2px;
   }
 
   .user-message, .message{
@@ -20,7 +23,7 @@
     width: 95%;
     margin: auto;
     // margin: 12px auto 0;
-    
+
 
     &:nth-last-child(2) {
       margin-bottom: 12px;
@@ -29,12 +32,12 @@
     .chat-message{
       text-align: justify;
       padding:5px 10px 10px;
-      
+
       display: block;
       max-width: 80%;
       position: relative;
 
-      
+
 
       .content{
         padding:5px 0 0;
@@ -70,7 +73,7 @@
     justify-content: flex-end;
 
     .chat-message{
-      background-color: #e9fcff;
+      background-color: azure;
       border-radius: 7px 0 7px 7px;
 
       &::after{
@@ -80,7 +83,7 @@
         border-style: solid;
         top: 0;
         right: -8px;
-        border-color: #e9fcff transparent transparent #e9fcff;
+        border-color: azure transparent transparent azure;
       }
 
       .sender{
@@ -127,7 +130,7 @@
         }
       }
     }
-    
+
   }
 
 
@@ -135,7 +138,7 @@
     justify-content: flex-start;
 
     .chat-message{
-      background-color: #fff;
+      background-color: snow;
       border-radius: 0 7px 7px;
 
       &::after{
@@ -145,7 +148,7 @@
         border-style: solid;
         top: 0;
         left: -8px;
-        border-color: white white transparent transparent;
+        border-color: snow snow transparent transparent;
       }
     }
 
@@ -155,7 +158,7 @@
       .sender{
         display: none;
       }
-      
+
       .chat-message{
         border-radius: 7px;
 
@@ -166,7 +169,7 @@
     }
 
 }
-  
+
 }
 
 .interstitial-message{
@@ -181,5 +184,3 @@ border-radius: 2px;
   color: white;
 }
 }
-
-

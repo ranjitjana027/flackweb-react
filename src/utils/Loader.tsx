@@ -1,17 +1,21 @@
-import * as React from 'react';
-import '../stylesheets/lib/loader.scss';
+import styles from '../stylesheets/utils/loader.module.scss';
 
-function Loader(){
+export function Loader(){
   return (
-    <div className='loader-background'>
-        <div className="loader-1">
-        </div>
-        <div className="loader-2">
-        </div>
-        <div className="loader-3">
-        </div>
+    <div className={styles.loader}>
+        <div></div>
+        <div></div>
+        <div></div>
     </div>
   );
 }
 
-export default Loader;
+export function ThreeDotsLoader(){
+  return (
+    <div className={styles.threeDots}>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  );
+}

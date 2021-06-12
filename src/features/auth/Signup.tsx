@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Input, Button } from '../../utils/FormElements';
-import '../../stylesheets/auth/auth.scss';
+import PermIdentityIcon from '@material-ui/icons/PermIdentity';
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import LockIcon from '@material-ui/icons/Lock';
+import styles from '../../stylesheets/auth/signup.module.scss';
 
 export default function Signup(){
   const [user,setUser]=React.useState({
@@ -54,22 +57,23 @@ export default function Signup(){
   };
 
   return (
-	  	<div className="signup-page">
+	  	<div className={styles.container}>
 			<div>
-				<div className="app-name">
+				<div className={styles.app}>
 					FLACK
 				</div>
-				<div className="welcome-text">
+				<div className={styles.text}>
 					Create a new account
 				</div>
 				<form
-				className="signup-form"
+				className={styles.form}
 				onSubmit={handleSubmit} >
 
 					<Input
 					id="inputDisplayName"
 					value={user && user.display_name}
 					label="Display Name"
+					icon={PermIdentityIcon}
 					options={{
 						type:'text',
 						name:'display_name',
@@ -82,6 +86,7 @@ export default function Signup(){
 					id="inputUsername"
 					value={user && user.username}
 					label="Email"
+					icon={AlternateEmailIcon}
 					options={{
 						type:'email',
 						name:'username',
@@ -95,6 +100,7 @@ export default function Signup(){
 					id="inputPassword"
 					value={user && user.password}
 					label="Password"
+					icon={LockIcon}
 					options={{
 						type:'password',
 						name:'password',
@@ -107,6 +113,7 @@ export default function Signup(){
 					id="inputRePassword"
 					value={user && user.re_password}
 					label="Confirm Password"
+					icon={LockIcon}
 					options={{
 						type:'password',
 						name:'re_password',
@@ -119,14 +126,14 @@ export default function Signup(){
 					text="Sign Up"
 					type="submit" />
 
-					<div className="form-input">
-						<div className='error-message'>
+					<div className={styles.section}>
+						<div className={styles.error}>
 							{ info }
 						</div>
-						<div className="info-message">
+						<div className={styles.info}>
 						By continuing, you are agree to our Conditions of Use and Privacy Notice.
 						</div>
-						<div className="info-message">
+						<div className={styles.info}>
 							Already Registered! Log In <a href='/login'>here</a>.
 						</div>
 						<p style={{

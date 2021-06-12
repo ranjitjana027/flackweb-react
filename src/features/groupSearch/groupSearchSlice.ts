@@ -1,7 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
+
+type Message={
+    dttm:string,
+    message: string,
+    mid:number,
+    room: string,
+    room_id:string,
+    user:string
+}
+
+type Channel={
+    channel_id:string,
+    channel_name: string,
+    created_on: string,
+    last_message: null| Message,
+    members_count: number
+}
+
 
 type GroupSearchState={
-    [title:string]:any
+    [title:string]:Channel[]
 }
 
 export const groupSearchSlice=createSlice({
@@ -14,7 +33,7 @@ export const groupSearchSlice=createSlice({
     }
 })
 
-export const selectAllSearchKeys=(state:GroupSearchState)=>{
+export const selectAllSearchKeys=(state:RootState)=>{
     return Object.keys(state.groupSearch);
 }
 

@@ -1,13 +1,10 @@
 import * as React from 'react';
 
-export function Feedback(props:{active:boolean}){
+export function Feedback(){
     return (
-        <div className="sidebar-content">
-          <div className={props.active?"feedback active":"feedback"}>
-              <div className="headline">
-                  Feedback
-              </div>
-              <form className="feedback-form">
+          <div className="feedback">
+              
+              {/* <form className="feedback-form">
                   <div>
                       <input placeholder="Name"/>
                   </div>
@@ -20,9 +17,9 @@ export function Feedback(props:{active:boolean}){
                       placeholder="Message" />
                   </div>
                   <button>Send</button>
-              </form>
+              </form> */}
+              <div style={{ fontFamily:'cursive', fontSize:'x-large', textAlign:'center', color:'magenta'}}>Coming Soon</div>
           </div>
-      </div>
 
     );
 }

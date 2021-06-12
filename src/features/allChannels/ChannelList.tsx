@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSocket } from '../../hooks/use-socket';
 import { selectAllChannels, selectActiveChannels, loadChannels, removeChannel } from './allChannelsSlice';
-import ChannelLinkCard from './ChannelListCard';
+import { addNewMessages } from './../chatMessages/chatMessagesSlice';
+import { updateLastMessage } from '../allChannels/allChannelsSlice';
+import ChannelLinkCard from '../../components/chat/ChannelListCard';
 import '../../stylesheets/chat/channel_list.scss';
 import { useAppSelector } from '../../app/hooks';
+import { ThreeDotsLoader } from '../../utils/Loader';
 
 function ChannelList(){
     const dispatch=useDispatch();
@@ -53,6 +56,27 @@ function ChannelList(){
         }
     },[socket, auth, dispatch]);
 
+    useEffect(()=>{
+        if(socket!=null){
+            const receiveMessageListener=(data:any) => {
+                dispatch(addNewMessages({
+                    channel:data.room_id,
+                    messages: [data]
+                }));
+                dispatch(updateLastMessage({
+                    channel_id:data.room_id,
+                    last_message: data
+                }));
+
+            };
+
+            socket.on('receive message', receiveMessageListener);
+            return ()=>{
+                socket.offAny(receiveMessageListener);
+            }
+        }
+    }, [socket, dispatch]);
+
 
 
     let channels=useSelector(selectAllChannels);
@@ -77,7 +101,12 @@ function ChannelList(){
     }
 
     if(!channels){
-        return <div style={{ textAlign: 'center'}}>Loading</div>;
+        // return <div style={{ textAlign: 'center'}}>Loading</div>;
+        return (
+        <div style={{position:'relative'}}>
+            <ThreeDotsLoader/>
+        </div>
+        )
     }
     if(channels && channels.length===0){
       return <div style={{ textAlign: 'center'}}>Join A Channel First</div>

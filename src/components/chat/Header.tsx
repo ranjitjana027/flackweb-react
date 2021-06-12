@@ -1,16 +1,30 @@
 import * as React from 'react';
 import { ExitToApp } from '@material-ui/icons';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import '../../stylesheets/chat/header.scss';
 
-function Header(props: any){
+type PropType={
+    channel_info: boolean | {
+        channel_id:string,
+        channel_name:string,
+        members_count:number
+    },
+    goBack:()=>void,
+    exitGroup:()=>void
+}
+
+function Header(props: PropType){
     return (
         <div className="header">
             <div className="channel-info">
-                <div className="channel-name">
-                    <div className="channel-title">{props.channel_info && props.channel_info.channel_name}</div>
-                    <div className="channel-id">{props.channel_info && ('@'+ props.channel_info.channel_id)}</div>
+                <div className="arrow-back mobile-only" onClick={props.goBack}>
+                    <ArrowBackIcon />
                 </div>
-                <div className="members-count">{props.channel_info && ( props.channel_info.members_count+' members')}</div>
+                <div className="channel-name">
+                    <div className="channel-title">{typeof props.channel_info!='boolean' && props.channel_info.channel_name}</div>
+                    <div className="channel-id">{typeof props.channel_info != 'boolean' && ( props.channel_info.members_count+' members')}</div>
+                </div>
+                {/* <div className="members-count">{typeof props.channel_info != 'boolean' && ( props.channel_info.members_count+' members')}</div> */}
             </div>
             <div
             className="exit-group"

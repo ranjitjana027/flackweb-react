@@ -1,0 +1,99 @@
+.loader{
+  background-color: rgba(0, 0, 0,  49%);
+  height: 100vh;
+  width: 100%;
+  position: relative;
+
+  div{
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border-radius: 50%;
+    border: solid 2px ;
+
+    &:nth-child(1){
+      width: 200px;
+      height: 200px;
+      border-color: #e21a75 transparent;
+      animation: rotation 1s linear infinite;
+    }
+  
+    &:nth-child(2){
+      width: 180px;
+      height: 180px;
+      border-color: transparent #2046e0 ;
+      animation: rotation 0.9s linear infinite;
+    }
+  
+    &:nth-child(3){
+      width: 160px;
+      height: 160px;
+      border-color: #1bda60 transparent;
+      animation: rotation 0.8s linear infinite;
+    }
+  }
+
+  
+
+
+
+  @keyframes rotation{
+    0%{
+      transform: rotate(0);
+    }
+    100%{
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.threeDots{
+  height: 100%;
+  max-height: 60px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 20px 20px 20px auto;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 1;
+  background-color: inherit;
+
+  div{
+    margin: 10px;
+    border: 3px solid;
+    border-color: black;
+    background-color: black;
+    border-radius: 50%;
+
+    &:nth-child(1){
+      animation: anim 2s  0s infinite;
+    }
+    &:nth-child(2){
+        animation: anim 2s  0.3s infinite ;
+    }
+    &:nth-child(3){
+        animation: anim 2s  0.6s infinite ;
+    }
+  }
+
+  
+
+  @keyframes anim {
+      0%{
+          transform: scale(1);
+      }
+      25%{
+          transform: scale(1.5);
+      }
+      50%{
+          transform: scale(1);
+      }
+      100%{
+          transform: scale(1);
+      }
+  }
+}

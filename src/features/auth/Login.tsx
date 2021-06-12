@@ -1,27 +1,42 @@
 import * as React from 'react';
 import { useLocation, Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { signin } from './authSlice';
-import { Input, Button } from '../../utils/FormElements';
-import '../../stylesheets/auth/auth.scss';
+import { Input, Button, Checkbox } from '../../utils/FormElements';
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import LockIcon from '@material-ui/icons/Lock';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import styles from '../../stylesheets/auth/login.module.scss';
+
 
 export default function Login(){
-	const [user,setUser]=React.useState({
-	username:'',
-	password:''
+	const [user,setUser]=React.useState<{username:string, password:string}>({
+		username:'',
+		password:''
 	});
+	const [remember,setRemember]=React.useState<boolean>(false);
 
+	React.useEffect(() => {
+		if(localStorage.getItem('flackwebRememberUsername')==='true'){
+			setRemember(true);
+			setUser(user=>{
+				return {
+				...user,
+				username:localStorage.getItem('flackwebUsername')==null?'':`${localStorage.getItem("flackwebUsername")}`
+				}
+			});
+		}
+	},[]);
 
-	const dispatch=useDispatch();
+	const dispatch=useAppDispatch();
 
 	const location: { state: { from: { pathname : string }}}=useLocation();
 
 	const { from }= location.state || { from : { pathname :'/'}};
-	const auth=useSelector((state:any)=>state.auth);
+	const auth=useAppSelector ((state)=>state.auth);
 	
 	const handleSubmit=(e:React.SyntheticEvent)=>{
 		e.preventDefault();
-		dispatch(signin(user));
+		dispatch(signin({...user,remember:remember}));
 	}
 
 	const handleChange=({target}:React.ChangeEvent<HTMLInputElement>)=>{
@@ -35,26 +50,32 @@ export default function Login(){
 	});
 	};
 
+	const handleCheckboxChange=({target}:React.ChangeEvent<HTMLInputElement>)=>{
+		
+		setRemember(target.checked);
+	}
+
 	if(auth.user){
 		return <Redirect to={from} />
 	}
 
 	return (
-		<div className="login-page">
+		<div className={styles.container}>
 			<div>
-				<div className="app-name">
+				<div className={styles.app}>
 					FLACK
 				</div>
-				<div className="welcome-text">
+				<div className={styles.text}>
 					Welcome Back
 				</div>
 				<form
-				className="login-form"
+				className={styles.form}
 				onSubmit={handleSubmit} >
 					<Input
 					id="inputUsername"
-					value={user && user.username}
+					value={user.username}
 					label="Email"
+					icon={AlternateEmailIcon}
 					options={{
 						type:'email',
 						name:'username',
@@ -65,8 +86,9 @@ export default function Login(){
 
 					<Input
 					id="inputPassWord"
-					value={user && user.password}
+					value={user.password}
 					label="Password"
+					icon={LockIcon}
 					options={{
 						type:'password',
 						name:'password',
@@ -75,22 +97,29 @@ export default function Login(){
 						onChange: handleChange,
 					}} />
 
+					<Checkbox 
+					id="rememberMe"
+					name="rememberMe"
+					label="Remember Me"
+					options={{
+						onChange:handleCheckboxChange,
+						checked:remember
+					}} />
+
 					<Button
 					disabled={auth.isLoading}
-					options={{
-						'data-loading': auth.isLoading
-					}}
+					data-loading={ auth.isLoading }
 					text="Sign In"
 					type="submit" />
 
-					<div className="form-input">
-						<div className='error-message'>
+					<div className={styles.section}>
+						<div className={styles.error}>
 							{ !auth.isLoading && auth.status && auth.status }
 						</div>
-						<div className="info-message">
+						<div className={styles.info}>
 						By continuing, you are agree to our Conditions of Use and Privacy Notice.
 						</div>
-						<div className="info-message">
+						<div className={styles.info}>
 							Aren&apos;t Registered! <a href='/signup'> Register Now.</a>
 						</div>
 						<p style={{
