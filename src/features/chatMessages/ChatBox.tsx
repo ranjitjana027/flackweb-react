@@ -1,11 +1,14 @@
-import React, { useRef } from 'react';
+import * as React from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import { Send } from '@material-ui/icons';
 import { useSocket } from '../../hooks/use-socket';
 import '../../stylesheets/chat/chatbox.scss';
 
 function ChatBox(props:{ room: string}){
-    const text=useRef('');
+    const text=React.useRef('');
+    React.useEffect(()=>{
+        text.current='';
+    },[props.room]);
 
     const handleBlur = () => {
       console.log(text.current);

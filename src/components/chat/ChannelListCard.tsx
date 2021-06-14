@@ -12,7 +12,8 @@ type PropType={
 function ChannelLinkCard(props:PropType){
     let active =  useRouteMatch({ 
         path:props.to,
-        exact: true 
+        exact: true,
+        sensitive:true
     });
 
     return (
