@@ -5,7 +5,18 @@ import './index.scss';
 import App from './app/App';
 import  store  from './app/store';
 import reportWebVitals from './reportWebVitals';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 ReactDOM.render(
   (
     <Provider store={store}>
