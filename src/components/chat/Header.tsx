@@ -9,13 +9,14 @@ type PropType={
         channel_name:string,
         members_count:number
     },
-    goBack:()=>void,
-    exitGroup:()=>void
+    goBack: () => void,
+    exitGroup: () => void,
+    toggleChannelDetails: () => void
 }
 
 function Header(props: PropType){
     return (
-        <div className="header">
+        <div className = "header" onClick = { props.toggleChannelDetails }>
             <div className="channel-info">
                 <div className="arrow-back mobile-only" onClick={props.goBack}>
                     <ArrowBackIcon />
