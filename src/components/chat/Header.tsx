@@ -2,6 +2,8 @@ import * as React from 'react';
 import { ExitToApp } from '@material-ui/icons';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import '../../stylesheets/chat/header.scss';
+import CustomAvatar from "../../utils/CustomAvatar";
+import {Tooltip} from "@mui/material";
 
 type PropType={
     channel_info: boolean | {
@@ -16,21 +18,27 @@ type PropType={
 
 function Header(props: PropType){
     return (
-        <div className = "header" onClick = { props.toggleChannelDetails }>
-            <div className="channel-info">
-                <div className="arrow-back mobile-only" onClick={props.goBack}>
+        <div className = "header" >
+            <div className = "channel-info">
+                <div className = "arrow-back mobile-only" onClick = {props.goBack} >
                     <ArrowBackIcon />
                 </div>
-                <div className="channel-name">
-                    <div className="channel-title">{typeof props.channel_info!='boolean' && props.channel_info.channel_name}</div>
-                    <div className="channel-id">{typeof props.channel_info != 'boolean' && ( props.channel_info.members_count+' members')}</div>
+                <div className = "channel-dp" >
+                    <CustomAvatar alt = {`${typeof props.channel_info !== 'boolean' && props.channel_info.channel_name}`} src = '' />
                 </div>
-                {/* <div className="members-count">{typeof props.channel_info != 'boolean' && ( props.channel_info.members_count+' members')}</div> */}
+
+                <Tooltip title = 'See Details' >
+                    <div className = "channel-name" onClick = { props.toggleChannelDetails } >
+                        <div className = "channel-title" > {typeof props.channel_info !== 'boolean' && props.channel_info.channel_name} </div>
+                        <div className="channel-id" > {typeof props.channel_info !== 'boolean' && (`@${props.channel_info.channel_id}`)} </div>
+                    </div>
+                </Tooltip>
+                {/* <div className="members-count"> {typeof props.channel_info !== 'boolean' && ( props.channel_info.members_count+' members')} </div> */}
             </div>
-            <div
-            className="exit-group"
-            onClick={props.exitGroup}>
-                <ExitToApp />
+            <div className = "exit-group" onClick = {props.exitGroup} >
+                <Tooltip title = 'Exit Group' >
+                    <ExitToApp />
+                </Tooltip>
             </div>
         </div>
     );

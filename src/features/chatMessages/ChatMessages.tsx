@@ -26,10 +26,6 @@ export default function ChatMessages(){
 
     const [openChannelDetails, setOpenChanelDetails] = React.useState<boolean>(false);
 
-    const handleOpenChannelDetails = () => {
-        setOpenChanelDetails(true);
-    }
-
     const handleCloseChannelDetails = () => {
         setOpenChanelDetails(false);
     }
@@ -83,7 +79,6 @@ export default function ChatMessages(){
             <ChannelDetails
                 channelDetails = { channel_info }
                 openChannelDetails = { openChannelDetails }
-                handleOpenChannelDetails = { handleOpenChannelDetails }
                 handleCloseChannelDetails = { handleCloseChannelDetails }
             />
             <MessageList

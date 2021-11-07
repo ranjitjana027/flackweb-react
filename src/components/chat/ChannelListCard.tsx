@@ -1,5 +1,5 @@
 import { Link, useRouteMatch } from 'react-router-dom';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import CustomAvatar from "../../utils/CustomAvatar";
 
 type PropType={
     to:string,
@@ -19,7 +19,7 @@ function ChannelLinkCard(props:PropType){
     return (
         <Link to={props.to} className={active?'active':''} >
             <div className="channel-icon">
-                <PeopleAltIcon/>
+                <CustomAvatar alt={`${props.channel}`} src={'profile.jpg'}/>
             </div>
             <div className="channel-details">
                 <div className="channel-name">
