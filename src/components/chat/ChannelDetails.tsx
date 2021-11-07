@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Avatar,
     Box,
     List,
     ListItem,
@@ -10,6 +9,7 @@ import {
     Modal,
     Typography
 } from "@mui/material";
+import CustomAvatar from "../../utils/CustomAvatar";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,11 +34,19 @@ type PropType={
         }>
     },
     openChannelDetails: boolean,
-    handleOpenChannelDetails: () => void,
     handleCloseChannelDetails: () => void
 }
 
 export default function ChannelDetails(props: PropType) {
+    const memberCount =  (typeof props.channelDetails !== 'boolean' && props.channelDetails.members.length) || 0;
+    const formattedMembersString = (count: number) => {
+        if(count > 1) {
+            return `${count} members`;
+        } else {
+            return `${count} member`;
+        }
+    };
+
     return (
         <>
             <Modal
@@ -52,7 +60,7 @@ export default function ChannelDetails(props: PropType) {
                         { typeof props.channelDetails !== 'boolean' && props.channelDetails.channel_name}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2, color: "#607d8b" }}>
-                        Members
+                        { formattedMembersString(memberCount) }
                     </Typography>
                     <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', maxHeight: 300, overflow: 'auto' }}>
                         {typeof props.channelDetails !== 'boolean' && props.channelDetails.members.map((member) => {
@@ -64,9 +72,9 @@ export default function ChannelDetails(props: PropType) {
                                 >
                                     <ListItemButton>
                                         <ListItemAvatar>
-                                            <Avatar
+                                            <CustomAvatar
                                                 alt={`${member.display_name}`}
-                                                src={`/static/images/avatar/${member.dp}.jpg`}
+                                                src={member.dp?`/static/images/avatar/${member.dp}.jpg`:''}
                                             />
                                         </ListItemAvatar>
                                         <ListItemText id={labelId} primary={member.display_name} secondary={member.username}/>
