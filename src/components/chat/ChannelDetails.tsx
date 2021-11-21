@@ -11,8 +11,9 @@ import {
 } from "@mui/material";
 import CustomAvatar from "../../utils/CustomAvatar";
 
+type absolute = 'absolute'
 const style = {
-    position: 'absolute' as 'absolute',
+    position: 'absolute' as absolute,
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -24,11 +25,11 @@ const style = {
 };
 
 
-type PropType={
+type PropType = {
     channelDetails: boolean | {
-        channel_id:string,
-        channel_name:string,
-        members_count:number,
+        channel_id: string,
+        channel_name: string,
+        members_count: number,
         members: Array<{
             [key: string]: string
         }>
@@ -38,9 +39,9 @@ type PropType={
 }
 
 export default function ChannelDetails(props: PropType) {
-    const memberCount =  (typeof props.channelDetails !== 'boolean' && props.channelDetails.members.length) || 0;
+    const memberCount = (typeof props.channelDetails !== 'boolean' && props.channelDetails.members.length) || 0;
     const formattedMembersString = (count: number) => {
-        if(count > 1) {
+        if (count > 1) {
             return `${count} members`;
         } else {
             return `${count} member`;
@@ -56,13 +57,19 @@ export default function ChannelDetails(props: PropType) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ color:'#2196f3'}}>
-                        { typeof props.channelDetails !== 'boolean' && props.channelDetails.channel_name}
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color: '#2196f3'}}>
+                        {typeof props.channelDetails !== 'boolean' && props.channelDetails.channel_name}
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2, color: "#607d8b" }}>
-                        { formattedMembersString(memberCount) }
+                    <Typography id="modal-modal-description" sx={{mt: 2, color: "#607d8b"}}>
+                        {formattedMembersString(memberCount)}
                     </Typography>
-                    <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', maxHeight: 300, overflow: 'auto' }}>
+                    <List dense sx={{
+                        width: '100%',
+                        maxWidth: 360,
+                        bgcolor: 'background.paper',
+                        maxHeight: 300,
+                        overflow: 'auto'
+                    }}>
                         {typeof props.channelDetails !== 'boolean' && props.channelDetails.members.map((member) => {
                             const labelId = `checkbox-list-secondary-label-${member.display_name}`;
                             return (
@@ -74,10 +81,11 @@ export default function ChannelDetails(props: PropType) {
                                         <ListItemAvatar>
                                             <CustomAvatar
                                                 alt={`${member.display_name}`}
-                                                src={member.dp?`/static/images/avatar/${member.dp}.jpg`:''}
+                                                src={member.dp ? `/static/images/avatar/${member.dp}.jpg` : ''}
                                             />
                                         </ListItemAvatar>
-                                        <ListItemText id={labelId} primary={member.display_name} secondary={member.username}/>
+                                        <ListItemText id={labelId} primary={member.display_name}
+                                                      secondary={member.username}/>
                                     </ListItemButton>
                                 </ListItem>
                             );

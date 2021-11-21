@@ -1,27 +1,26 @@
 import * as React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import {Switch, Route, useRouteMatch} from 'react-router-dom';
 import '../../stylesheets/chat/dashboard.scss';
 import SideBar from './SideBar';
 import ChannelList from '../../features/allChannels/ChannelList';
 import ChatMessages from '../../features/chatMessages/ChatMessages';
 
-export function Dashboard(){
-
-    const match=useRouteMatch({
-        path:'/',
-        exact:true
+export default function Dashboard() {
+    const match = useRouteMatch({
+        path: '/',
+        exact: true
     });
 
     return (
         <div className="grid-container">
             <div className="chat-nav">
-                <SideBar />
-                <ChannelList />
+                <SideBar/>
+                <ChannelList/>
             </div>
-            <div className={(!match)?"chat-content show-chat":"chat-content"}>
+            <div className={(!match) ? "chat-content show-chat" : "chat-content"}>
                 <Switch>
                     <Route path="/chat/:channel">
-                      <ChatMessages />
+                        <ChatMessages/>
                     </Route>
                     <Route path="/">
                         <div>

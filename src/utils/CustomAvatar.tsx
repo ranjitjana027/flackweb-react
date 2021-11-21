@@ -30,6 +30,6 @@ function stringAvatar(name: string) {
     };
 }
 
-export default function CustomAvatar(props: {alt?: string, src?: string}) {
-    return <Avatar alt = {props.alt} src = {props.src} {...stringAvatar(props.alt || "A")} />;
+export default function CustomAvatar(props: { alt?: string, src?: string }): JSX.Element {
+    return <Avatar alt={props.alt} src={props.src} {...stringAvatar(props.alt || "A")} />;
 }

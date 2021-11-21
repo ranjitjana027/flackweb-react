@@ -1,56 +1,56 @@
-import * as React  from 'react';
-import { signout } from '../../features/auth/authSlice';
-import { GroupSearch } from '../../features/groupSearch/GroupSearch';
-import { Feedback } from '../Feedback';
-import { Profile } from '../../features/auth/Profile';
-import { OverridableComponent } from '@material-ui/core/OverridableComponent';
-import { SvgIconTypeMap } from '@material-ui/core';
-import { useAppDispatch } from '../../app/hooks';
-import { ArrowBackIcon, CrossIcon } from '../../utils/Icons';
+import * as React from 'react';
+import {signout} from '../../features/auth/authSlice';
+import GroupSearch from '../../features/groupSearch/GroupSearch';
+import Feedback from '../Feedback';
+import Profile from '../../features/auth/Profile';
+import {OverridableComponent} from '@material-ui/core/OverridableComponent';
+import {SvgIconTypeMap} from '@material-ui/core';
+import {useAppDispatch} from '../../app/hooks';
+import {ArrowBackIcon, CrossIcon} from '../../utils/Icons';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import ChatIcon from '@material-ui/icons/Chat';
 import '../../stylesheets/chat/sidebar.scss';
 
 
-export default function SideBar(){
-    const [menuSelected,setMenuSelected]=React.useState<string>('');
-    const dispatch=useAppDispatch();
+export default function SideBar() {
+    const [menuSelected, setMenuSelected] = React.useState<string>('');
+    const dispatch = useAppDispatch();
 
-    const menuItems: [string,string,OverridableComponent<SvgIconTypeMap<{}, "svg">>][]=[
-        ['Me','View Profile',AccountCircleIcon],
+    const menuItems: [string, string, OverridableComponent<SvgIconTypeMap<unknown, "svg">>][] = [
+        ['Me', 'View Profile', AccountCircleIcon],
+        ['Direct Message', 'Join a new group', ChatIcon],
         ['New Group', 'Join a new group', GroupAddIcon],
         ['Feedback', 'Write to us', RateReviewIcon]
     ];
 
-    const handleClick=(l:string,e:React.MouseEvent<HTMLElement>)=>{
+    const handleClick = (l: string, e: React.MouseEvent<HTMLElement>) => {
         setMenuSelected(l);
-        const target: HTMLElement|null=document.querySelector('#sidebar');
-        if(target !== null){
-            if(l===''){
+        const target: HTMLElement | null = document.querySelector('#sidebar');
+        if (target !== null) {
+            if (l === '') {
                 target.classList.remove('show-sidebar-content');
-            }
-            else{
+            } else {
                 target.classList.add('show-sidebar-content');
             }
         }
     }
 
-    const closeSidebar=({target}: React.MouseEvent<HTMLDivElement>)=>{
-        if((target as HTMLElement).classList.contains('sidebar')){
+    const closeSidebar = ({target}: React.MouseEvent<HTMLDivElement>) => {
+        if ((target as HTMLElement).classList.contains('sidebar')) {
             (target as HTMLElement).classList.add('hidden');
             setMenuSelected('');
         }
     }
-    const toggleSidebar=()=>{
-        const target: HTMLElement|null=document.querySelector('#sidebar');
-        if(target !== null){
-            if(target.classList.contains('hidden')){
+    const toggleSidebar = () => {
+        const target: HTMLElement | null = document.querySelector('#sidebar');
+        if (target !== null) {
+            if (target.classList.contains('hidden')) {
                 target.classList.remove('hidden');
-            }
-            else{
+            } else {
                 target.classList.add('hidden');
                 setMenuSelected('');
                 target.classList.remove('show-sidebar-content');
@@ -64,28 +64,28 @@ export default function SideBar(){
             <div className="expand-menubar">
                 <div className="menu-icon">
                     <DehazeIcon
-                    onClick={toggleSidebar}/>
+                        onClick={toggleSidebar}/>
                 </div>
             </div>
             <div
-            id="sidebar"
-            className="sidebar  hidden"
-            onClick={closeSidebar} >
+                id="sidebar"
+                className="sidebar  hidden"
+                onClick={closeSidebar}>
                 <div className="menubar">
                     <div
-                    className="close-menubar"
-                    title="Close"
-                    onClick={toggleSidebar} >
+                        className="close-menubar"
+                        title="Close"
+                        onClick={toggleSidebar}>
                         <CrossIcon/>
                     </div>
                     <ul>
                         {
-                            menuItems.map(([label,title,Icon]:[string,string,OverridableComponent<SvgIconTypeMap<{}, "svg">>],i)=>(
+                            menuItems.map(([label, title, Icon]: [string, string, OverridableComponent<SvgIconTypeMap<unknown, "svg">>], i) => (
                                 <li
-                                key={i}
-                                className={menuSelected===label?"menubar-item active":"menubar-item"}
-                                title={title}
-                                onClick={(e)=>handleClick(label,e)} >
+                                    key={i}
+                                    className={menuSelected === label ? "menubar-item active" : "menubar-item"}
+                                    title={title}
+                                    onClick={(e) => handleClick(label, e)}>
                                     <div>
                                         <Icon/>
                                     </div>
@@ -96,9 +96,9 @@ export default function SideBar(){
                             ))
                         }
                         <li
-                        className="menubar-item"
-                        title="Logout"
-                        onClick={()=>dispatch(signout())} >
+                            className="menubar-item"
+                            title="Logout"
+                            onClick={() => dispatch(signout())}>
                             <div>
                                 <PowerSettingsNewIcon/>
                             </div>
@@ -108,33 +108,33 @@ export default function SideBar(){
                         </li>
                     </ul>
                     <div
-                    style={{
-                        position:'absolute',
-                        textAlign:'center',
-                        width:'100%',
-                        bottom:'5px',
-                        cursor:'default',
-                        fontSize:'x-small'
-                    }}>
+                        style={{
+                            position: 'absolute',
+                            textAlign: 'center',
+                            width: '100%',
+                            bottom: '5px',
+                            cursor: 'default',
+                            fontSize: 'x-small'
+                        }}>
                         Version 2.0.2021
                     </div>
                 </div>
                 <div className="sidebar-content">
                     <header>
-                        <div 
-                        className="icon" 
-                        title="Go back"
-                        onClick={(e)=>handleClick('',e)} >
+                        <div
+                            className="icon"
+                            title="Go back"
+                            onClick={(e) => handleClick('', e)}>
                             <ArrowBackIcon/>
                         </div>
                         <div className="headline">
                             {menuSelected}
                         </div>
                     </header>
-                    
-                    {menuSelected==="Me" && <Profile/> }
-                    { menuSelected==="New Group" && <GroupSearch toggleSidebar={toggleSidebar}/> }
-                    { menuSelected==="Feedback" && <Feedback/> }
+
+                    {menuSelected === "Me" && <Profile/>}
+                    {menuSelected === "New Group" && <GroupSearch toggleSidebar={toggleSidebar}/>}
+                    {menuSelected === "Feedback" && <Feedback/>}
                 </div>
             </div>
 
