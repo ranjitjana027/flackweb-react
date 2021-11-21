@@ -26,7 +26,7 @@ function stringAvatar(name: string) {
         sx: {
             bgcolor: stringToColor(name),
         },
-        children: name.split(' ').slice(0, 2).reduce((prev, current) => prev + current[0], '')  //`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: name.replace(/[^A-Za-z]/g, '').split(' ').slice(0, 2).reduce((prev, current) => prev + current[0], '')  //`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
     };
 }
 

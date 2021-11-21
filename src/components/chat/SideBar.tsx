@@ -14,6 +14,7 @@ import RateReviewIcon from '@material-ui/icons/RateReview';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ChatIcon from '@material-ui/icons/Chat';
 import '../../stylesheets/chat/sidebar.scss';
+import DirectMessage from "../../features/directMessage/DirectMessage";
 
 
 export default function SideBar() {
@@ -133,6 +134,7 @@ export default function SideBar() {
                     </header>
 
                     {menuSelected === "Me" && <Profile/>}
+                    {menuSelected === "Direct Message" && <DirectMessage toggleSidebar={toggleSidebar}/>}
                     {menuSelected === "New Group" && <GroupSearch toggleSidebar={toggleSidebar}/>}
                     {menuSelected === "Feedback" && <Feedback/>}
                 </div>

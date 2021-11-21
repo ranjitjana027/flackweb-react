@@ -9,6 +9,8 @@ import ChannelLinkCard from '../../components/chat/ChannelListCard';
 import '../../stylesheets/chat/channel_list.scss';
 import {useAppSelector} from '../../app/hooks';
 import {ThreeDotsLoader} from '../../utils/Loader';
+import GroupsIcon from '@material-ui/icons/Group';
+import {Chip, Divider} from "@mui/material";
 
 function ChannelList() {
     const dispatch = useDispatch();
@@ -112,6 +114,11 @@ function ChannelList() {
 
     return (
         <ul className="channel_list">
+            <li key={"header"} style={{display:"flex", alignItems:'center', padding:'5px'}}>
+                <Divider>
+                    <Chip icon={<GroupsIcon />} label="Channels" />
+                </Divider>
+            </li>
             {
                 channels &&
                 channels.map((item, i) => (

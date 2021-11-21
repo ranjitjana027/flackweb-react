@@ -11,13 +11,15 @@ import ChannelDetails from "../../components/chat/ChannelDetails";
 
 export default function ChatMessages() {
     const {channel}: { channel: string } = useParams();
+    const isChannel = channel[0] === '@';
+    const slicedChannel = isChannel ? channel.slice(1) : channel;
     const dispatch = useAppDispatch();
-    const messages = useAppSelector(state => state.chatMessages[channel.slice(1)]);
+    const messages = useAppSelector(state => state.chatMessages[slicedChannel]);
     const channel_info = useAppSelector(state => {
         if (typeof state.allChannels.channels === 'boolean') {
             return false;
         }
-        return state.allChannels.channels[channel.slice(1)];
+        return state.allChannels.channels[slicedChannel];
     });
     const activeChannels = useAppSelector(selectActiveChannels);
     const socket = useSocket();
@@ -37,9 +39,9 @@ export default function ChatMessages() {
 
     useEffect(() => {
         if (!messages) {
-            dispatch(loadMessages(channel.slice(1)));
+            dispatch(loadMessages(slicedChannel));
         }
-    }, [channel, messages, dispatch]);
+    }, [slicedChannel, messages, dispatch]);
 
     const goBack = () => {
         history.goBack();
@@ -49,7 +51,7 @@ export default function ChatMessages() {
     const exitGroup = () => {
         if (socket !== null) {
             socket.emit('leave', {
-                room: channel.slice(1)
+                room: slicedChannel
             });
         }
         history.push("/");
@@ -60,7 +62,7 @@ export default function ChatMessages() {
     }
 
 
-    if (activeChannels && !activeChannels.includes(channel.slice(1))) {
+    if (activeChannels && !activeChannels.includes(slicedChannel)) {
         return (
             <div className="initial">
                 Join first to see chat messages
@@ -87,7 +89,7 @@ export default function ChatMessages() {
                 auth={auth}
             />
             <ChatBox
-                room={channel.slice(1)}
+                room={slicedChannel}
             />
         </Fragment>
     );
