@@ -26,10 +26,10 @@ function stringAvatar(name: string) {
         sx: {
             bgcolor: stringToColor(name),
         },
-        children: name.split(' ').slice(0, 2).reduce((prev, current) => prev + current[0], '')  //`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        children: name.replace(/[^A-Za-z]/g, '').split(' ').slice(0, 2).reduce((prev, current) => prev + current[0], '')  //`${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
     };
 }
 
-export default function CustomAvatar(props: {alt?: string, src?: string}) {
-    return <Avatar alt = {props.alt} src = {props.src} {...stringAvatar(props.alt || "A")} />;
+export default function CustomAvatar(props: { alt?: string, src?: string }): JSX.Element {
+    return <Avatar alt={props.alt} src={props.src} {...stringAvatar(props.alt || "A")} />;
 }

@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-export function Feedback(){
+export default function Feedback() {
     return (
-          <div className="feedback">
-              
-              {/* <form className="feedback-form">
+        <div className="feedback">
+
+            {/* <form className="feedback-form">
                   <div>
                       <input placeholder="Name"/>
                   </div>
@@ -18,8 +18,10 @@ export function Feedback(){
                   </div>
                   <button>Send</button>
               </form> */}
-              <div style={{ fontFamily:'cursive', fontSize:'x-large', textAlign:'center', color:'magenta'}}>Coming Soon</div>
-          </div>
+            <div style={{fontFamily: 'cursive', fontSize: 'x-large', textAlign: 'center', color: 'magenta'}}>Coming
+                Soon
+            </div>
+        </div>
 
     );
 }
