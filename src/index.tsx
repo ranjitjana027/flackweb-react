@@ -1,33 +1,34 @@
+import * as React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import {BrowserRouter as Router} from 'react-router-dom';
+import {Provider} from 'react-redux';
 import './index.scss';
 import App from './app/App';
-import  store  from './app/store';
+import store from './app/store';
 import reportWebVitals from './reportWebVitals';
 import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+import {Integrations} from "@sentry/tracing";
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  integrations: [new Integrations.BrowserTracing()],
+    dsn: process.env.SENTRY_DSN,
+    integrations: [new Integrations.BrowserTracing()],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
 });
 ReactDOM.render(
-  (
-    <Provider store={store}>
-      <Router>
-        <App/>
-      </Router>
-    </Provider>
-  
-  )
-  ,
-  document.getElementById('root')
+    (
+        <Provider store={store}>
+            <Router>
+                <App/>
+            </Router>
+        </Provider>
+
+    )
+    ,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
