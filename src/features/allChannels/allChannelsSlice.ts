@@ -1,29 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
+import {Channel, ChannelList} from "./types";
+import {Message} from "../chatMessages/types";
 
-type Message = {
-    dttm: string,
-    message: string,
-    mid: number,
-    room: string,
-    room_id: string,
-    user: string
-}
-type Channel = {
-    channel_id: string,
-    channel_name: string,
-    created_on: string,
-    last_message: null | Message,
-    members: Array<{
-        [key: string]: string
-    }>,
-    members_count: number,
-    isMember: boolean,
-}
-
-type Channels = {
-    [channel_id: string]: Channel
-}
 
 export const loadChannels = createAsyncThunk(
     'allChannels/loadChannels',
@@ -37,7 +16,7 @@ export const loadChannels = createAsyncThunk(
         });
         const data = await response.json();
         if (data.success) {
-            const channels: Channels = {};
+            const channels: ChannelList = {};
             for (const channel of data.channels) {
                 channels[channel.channel_id] = channel;
                 channels[channel.channel_id].isMember = true;
@@ -60,7 +39,7 @@ const rejected = (state: AllChannelsType) => {
 }
 
 type AllChannelsType = {
-    channels: boolean | Channels,
+    channels: boolean | ChannelList,
     isLoading: boolean,
     hasError: boolean
 }
@@ -89,7 +68,7 @@ export const allChannelsSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(loadChannels.pending, pending);
         builder.addCase(loadChannels.rejected, rejected);
-        builder.addCase(loadChannels.fulfilled, (state: AllChannelsType, action: PayloadAction<Channels | boolean>) => {
+        builder.addCase(loadChannels.fulfilled, (state: AllChannelsType, action: PayloadAction<ChannelList | boolean>) => {
             state.channels = action.payload;
         });
     }
@@ -97,7 +76,7 @@ export const allChannelsSlice = createSlice({
 
 export const selectAllChannels = (state: RootState) => {
     if (state.allChannels.channels)
-        return Object.values(state.allChannels.channels).sort((b, a) => (new Date(a.last_message ? a.last_message.dttm : a.created_on)).valueOf() - (new Date(b.last_message ? b.last_message.dttm : b.created_on)).valueOf());
+        return Object.values(state.allChannels.channels).sort((b, a) => (new Date(a.last_message ? a.last_message.timestamp : a.created_on)).valueOf() - (new Date(b.last_message ? b.last_message.timestamp : b.created_on)).valueOf());
     return false;
 }
 

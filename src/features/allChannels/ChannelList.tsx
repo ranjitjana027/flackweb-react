@@ -130,7 +130,7 @@ function ChannelList() {
                                 ((auth.isLoading || (typeof auth.user != 'boolean' && item.last_message.user !== auth.user.display_name)) ? item.last_message.user : "You")
                                 + " : " + item.last_message.message
                             ) : "No message so far"}
-                            lastMessageTime={item.last_message ? formatDate(item.last_message.dttm) : formatDate(item.created_on)}
+                            lastMessageTime={item.last_message ? formatDate(item.last_message.timestamp) : formatDate(item.created_on)}
                             membersCount={Number(item.members_count)}
                         />
                     </li>

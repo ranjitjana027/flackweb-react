@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 type Message = {
-    dttm: string,
+    timestamp: string,
     message: string,
     mid: number,
     room: string,
@@ -73,7 +73,7 @@ function MessageList(props: PropType) {
             <div className={props.className}>
                 {
                     props.messages.map((message, i) => {
-                        const messageTime = new Date(message.dttm);
+                        const messageTime = new Date(message.timestamp);
 
                         const messageCard = (<React.Fragment key={i}>
                             {messageTime.toDateString() !== defaultDate.toDateString() ? (

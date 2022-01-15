@@ -22,7 +22,6 @@ function App() {
                     </ProvideSocket>
                 </Route>
             </LoginRequired>
-
         </Switch>
     );
 }

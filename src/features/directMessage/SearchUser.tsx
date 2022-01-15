@@ -3,6 +3,10 @@ import {alpha, InputBase, List, ListItem, ListItemAvatar, ListItemButton, ListIt
 import SearchIcon from '@material-ui/icons/Search';
 import CustomAvatar from "../../utils/CustomAvatar";
 import {useHistory} from 'react-router-dom';
+import {addSearchResult, addUser, selectAllSearchKeys} from "../directMessage/directMessageSlice";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {useSocket} from "../../hooks/use-socket";
+import {User} from "./types";
 
 const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
@@ -45,18 +49,52 @@ const Search = styled('div')(({theme}) => ({
     },
 }));
 
-export default function DirectMessage(props: { toggleSidebar: () => void }) {
+export default function SearchUser(props: { toggleSidebar: () => void }) {
+    const [searchInput, setSearchInput] = React.useState<string>('');
+    const searchResults = useAppSelector(state => state.directMessage.searchResults && state.directMessage.searchResults[searchInput.toLowerCase()]);
+    const allSearchKeys = useAppSelector(selectAllSearchKeys);
     const {toggleSidebar} = props;
     const history = useHistory();
-    const userList = [
-        {
-            username: 'ranjit@jana.com',
-            displayName: 'Ranjit Jana',
-            dp: 'google.com'
+    const dispatch = useAppDispatch();
+    const socket = useSocket();
+
+    const handleSearchInput = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+        const value = target.value;
+        setSearchInput(value);
+
+        if (value.trim() !== '' && !allSearchKeys.includes(value.toLowerCase())) {
+            const fd = new FormData();
+            fd.append('title', value.trim().toLowerCase());
+            fetch(`${process.env.REACT_APP_API_DOMAIN}/api/users/find`, {
+                method: "POST",
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'x-access-tokens': `${localStorage.getItem('flackwebToken')}`
+                },
+                body: fd
+            })
+                .then(data => data.json())
+                .then(data => {
+                    if (data.success) {
+                        dispatch(addSearchResult(data))
+                    }
+                })
         }
-    ];
+    }
+
+    const handleClick = (user: User) => {
+        dispatch(addUser(user))
+        if (socket != null) {
+            socket.emit('initiate_dm', {
+                user: user.username
+            });
+        }
+        history.push(`/chat/${user.username}`);
+        toggleSidebar();
+    }
+
     return (<>
-        <Search>
+        <Search onChange={handleSearchInput}>
             <SearchIconWrapper>
                 <SearchIcon/>
             </SearchIconWrapper>
@@ -72,27 +110,23 @@ export default function DirectMessage(props: { toggleSidebar: () => void }) {
             maxHeight: 300,
             overflow: 'auto'
         }}>
-            {userList.map((user) => {
-                const labelId = `checkbox-list-secondary-label-${user.displayName}`;
-                const {username, displayName, dp} = user;
+            {searchResults && searchResults.map((user) => {
+                const labelId = `checkbox-list-secondary-label-${user.display_name}`;
+                const {username, display_name, dp} = user;
                 return (
                     <ListItem
-                        key={displayName}
+                        key={username}
                         disablePadding
-                        onClick={() => {
-                            history.push(`/chat/${username}`);
-                            toggleSidebar();
-                            }
-                        }
+                        onClick={() => handleClick({username,display_name,dp})}
                     >
                         <ListItemButton>
                             <ListItemAvatar>
                                 <CustomAvatar
-                                    alt={`${displayName}`}
+                                    alt={`${display_name}`}
                                     src={dp ? `/static/images/avatar/${dp}.jpg` : ''}
                                 />
                             </ListItemAvatar>
-                            <ListItemText id={labelId} primary={displayName}
+                            <ListItemText id={labelId} primary={display_name}
                                           secondary={username}/>
                         </ListItemButton>
                     </ListItem>

@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
 
 type Message = {
-    dttm: string,
+    timestamp: string,
     message: string,
     mid: number,
     room: string,

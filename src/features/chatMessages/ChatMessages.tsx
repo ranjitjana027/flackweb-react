@@ -16,10 +16,13 @@ export default function ChatMessages() {
     const dispatch = useAppDispatch();
     const messages = useAppSelector(state => state.chatMessages[slicedChannel]);
     const channel_info = useAppSelector(state => {
-        if (typeof state.allChannels.channels === 'boolean') {
-            return false;
+        if(isChannel) {
+            if (typeof state.allChannels.channels === 'boolean') {
+                return false;
+            }
+            return state.allChannels.channels[slicedChannel];
         }
-        return state.allChannels.channels[slicedChannel];
+        return state.directMessage.userList && state.directMessage.userList[slicedChannel];
     });
     const activeChannels = useAppSelector(selectActiveChannels);
     const socket = useSocket();
@@ -39,9 +42,12 @@ export default function ChatMessages() {
 
     useEffect(() => {
         if (!messages) {
-            dispatch(loadMessages(slicedChannel));
+            dispatch(loadMessages({
+                room: slicedChannel,
+                isChannel: isChannel
+            }));
         }
-    }, [slicedChannel, messages, dispatch]);
+    }, [slicedChannel, dispatch, isChannel]);
 
     const goBack = () => {
         history.goBack();
@@ -62,7 +68,7 @@ export default function ChatMessages() {
     }
 
 
-    if (activeChannels && !activeChannels.includes(slicedChannel)) {
+    if (isChannel && activeChannels && !activeChannels.includes(slicedChannel)) {
         return (
             <div className="initial">
                 Join first to see chat messages
@@ -90,6 +96,7 @@ export default function ChatMessages() {
             />
             <ChatBox
                 room={slicedChannel}
+                isChannel={isChannel}
             />
         </Fragment>
     );

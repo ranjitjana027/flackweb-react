@@ -4,11 +4,12 @@ import {Send} from '@material-ui/icons';
 import {useSocket} from '../../hooks/use-socket';
 import '../../stylesheets/chat/chatbox.scss';
 
-function ChatBox(props: { room: string }) {
+function ChatBox(props: { room: string, isChannel: boolean }) {
+    const {room, isChannel} = props;
     const text = React.useRef('');
     React.useEffect(() => {
         text.current = '';
-    }, [props.room]);
+    }, [room]);
 
     const handleBlur = () => {
         console.log(text.current);
@@ -25,7 +26,8 @@ function ChatBox(props: { room: string }) {
                 "send message",
                 {
                     message: text.current,
-                    room: props.room
+                    room: room,
+                    isChannel: isChannel
                 }
             );
         }

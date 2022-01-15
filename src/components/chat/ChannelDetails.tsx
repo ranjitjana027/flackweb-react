@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     Box,
     List,
@@ -24,22 +24,40 @@ const style = {
     p: 4,
 };
 
+type Channel = {
+    channel_id: string,
+    channel_name: string,
+    members_count: number,
+    members: Array<{
+        [key: string]: string
+    }>
+}
+
+type User = {
+    username: string,
+    display_name: string,
+    dp?: string
+}
 
 type PropType = {
-    channelDetails: boolean | {
-        channel_id: string,
-        channel_name: string,
-        members_count: number,
-        members: Array<{
-            [key: string]: string
-        }>
-    },
+    channelDetails: boolean | Channel | User,
     openChannelDetails: boolean,
     handleCloseChannelDetails: () => void
 }
 
+type ChannelInfo = {
+    id: string,
+    name: string,
+    members?:Array<{[key: string]: string}>,
+    memberCount?: number
+}
+
 export default function ChannelDetails(props: PropType) {
-    const memberCount = (typeof props.channelDetails !== 'boolean' && props.channelDetails.members.length) || 0;
+    const [channelInfo, setChannelIfo] = React.useState<ChannelInfo>({
+        id: '',
+        name: ''
+    });
+    const {channelDetails} = props;
     const formattedMembersString = (count: number) => {
         if (count > 1) {
             return `${count} members`;
@@ -47,6 +65,25 @@ export default function ChannelDetails(props: PropType) {
             return `${count} member`;
         }
     };
+
+    useEffect(() => {
+        if(typeof channelDetails === 'object' && 'channel_id' in channelDetails) {
+            setChannelIfo({
+                id: channelDetails.channel_id,
+                name: channelDetails.channel_name,
+                memberCount: channelDetails.members_count,
+                members: channelDetails.members
+            })
+
+        }
+        if(typeof channelDetails === 'object' && 'username' in channelDetails) {
+            setChannelIfo({
+                id: channelDetails.username,
+                name: channelDetails.display_name,
+            })
+
+        }
+    }, [channelDetails])
 
     return (
         <>
@@ -58,10 +95,10 @@ export default function ChannelDetails(props: PropType) {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color: '#2196f3'}}>
-                        {typeof props.channelDetails !== 'boolean' && props.channelDetails.channel_name}
+                        {channelInfo.name}
                     </Typography>
                     <Typography id="modal-modal-description" sx={{mt: 2, color: "#607d8b"}}>
-                        {formattedMembersString(memberCount)}
+                        {channelInfo.memberCount && formattedMembersString(channelInfo.memberCount)}
                     </Typography>
                     <List dense sx={{
                         width: '100%',
@@ -70,7 +107,7 @@ export default function ChannelDetails(props: PropType) {
                         maxHeight: 300,
                         overflow: 'auto'
                     }}>
-                        {typeof props.channelDetails !== 'boolean' && props.channelDetails.members.map((member) => {
+                        {channelInfo.members?.map((member) => {
                             const labelId = `checkbox-list-secondary-label-${member.display_name}`;
                             return (
                                 <ListItem
