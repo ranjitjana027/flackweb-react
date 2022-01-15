@@ -47,7 +47,7 @@ export default function ChatMessages() {
                 isChannel: isChannel
             }));
         }
-    }, [slicedChannel, dispatch, isChannel]);
+    }, [slicedChannel, dispatch, isChannel, messages]);
 
     const goBack = () => {
         history.goBack();
