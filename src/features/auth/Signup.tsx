@@ -8,10 +8,10 @@ import styles from '../../stylesheets/auth/signup.module.scss';
 
 export default function Signup() {
     const [user, setUser] = React.useState({
-        username: '',
+        email: '',
         password: '',
         re_password: '',
-        display_name: ''
+        name: ''
     });
     const [info, setInfo] = React.useState<string>('');
 
@@ -20,20 +20,25 @@ export default function Signup() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (user.password === user.re_password) {
-            const fd = new FormData();
-            fd.append("username", user.username);
-            fd.append("password", user.password);
-            fd.append("display_name", user.display_name);
-            fetch(`${process.env.REACT_APP_API_DOMAIN}/api/signup`, {
+            const headers= new Headers();
+            headers.append("Content-Type", "application/json");
+            fetch(`${process.env.REACT_APP_API_DOMAIN}/auth/signup`, {
                 method: 'POST',
-                body: fd
+                body: JSON.stringify(user),
+                headers
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
                         history.push("/login");
                     } else {
-                        setInfo("Error while signing up.");
+                        let info: string;
+                        if (Array.isArray(data.message)){
+                            info = data.message[0];
+                        } else {
+                            info = data.message || data.error || "Error while signing up."
+                        }
+                        setInfo(info);
                     }
                 });
         } else {
@@ -69,25 +74,25 @@ export default function Signup() {
 
                     <Input
                         id="inputDisplayName"
-                        value={user && user.display_name}
-                        label="Display Name"
+                        value={user && user.name}
+                        label="Name"
                         icon={PermIdentityIcon}
                         options={{
                             type: 'text',
-                            name: 'display_name',
-                            placeholder: 'Display Name',
+                            name: 'name',
+                            placeholder: 'Name',
                             required: true,
                             onChange: handleChange,
                         }}/>
 
                     <Input
                         id="inputUsername"
-                        value={user && user.username}
+                        value={user && user.email}
                         label="Email"
                         icon={AlternateEmailIcon}
                         options={{
                             type: 'email',
-                            name: 'username',
+                            name: 'email',
                             placeholder: 'Email',
                             required: true,
                             onChange: handleChange,

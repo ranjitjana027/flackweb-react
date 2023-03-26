@@ -14,7 +14,7 @@ type PropType = {
     messages: Message[],
     auth: {
         user: boolean | {
-            username: string,
+            user_id: string,
             display_name: string
         },
         status: boolean | string,
@@ -79,10 +79,10 @@ function MessageList(props: PropType) {
                             {messageTime.toDateString() !== defaultDate.toDateString() ? (
                                 <div className="message-list-date">{messageTime.toDateString()}</div>) : ''}
                             <div
-                                className={typeof props.auth.user != 'boolean' && props.auth.user.display_name === message.user ? "user-message" : "message"}>
+                                className={typeof props.auth.user != 'boolean' && props.auth.user.user_id === message.user ? "user-message" : "message"}>
                                 <div className="chat-message">
                                     <div className="sender">
-                                        {typeof props.auth.user != 'boolean' && props.auth.user.display_name === message.user ? 'You' : message.user}
+                                        {typeof props.auth.user != 'boolean' && props.auth.user.user_id === message.user ? 'You' : message.user}
                                     </div>
                                     <div>
                                     <span className="content">

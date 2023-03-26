@@ -11,8 +11,8 @@ import ChannelDetails from "../../components/chat/ChannelDetails";
 
 export default function ChatMessages() {
     const {channel}: { channel: string } = useParams();
-    const isChannel = channel[0] === '@';
-    const slicedChannel = isChannel ? channel.slice(1) : channel;
+    const isChannel = true; // todo: update logic here
+    const slicedChannel = channel;
     const dispatch = useAppDispatch();
     const messages = useAppSelector(state => state.chatMessages[slicedChannel]);
     const channel_info = useAppSelector(state => {

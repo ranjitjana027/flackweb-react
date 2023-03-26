@@ -165,7 +165,7 @@ export default function GroupSearch(props: { toggleSidebar: () => void }) {
                             className="search-result-channel">
                             <div className="channel-name">
                                 <div className="channel-title">{item.channel_name}</div>
-                                <div className="channel-id">{`@${item.channel_id}`}</div>
+                                <div className="channel-id">{`${item.channel_id}`}</div>
                             </div>
                             <div className="channel-members-count">{item.members_count} members</div>
                             <button

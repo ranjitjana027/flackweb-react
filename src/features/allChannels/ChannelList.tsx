@@ -21,25 +21,26 @@ function ChannelList() {
     }, [dispatch]);
 
     const socket = useSocket();
-    useEffect(() => {
-        if (socket != null)
-            socket.emit("join all");
 
-        return () => {
-            if (socket != null)
-                socket.emit("leave all")
-        }
-    }, [socket])
+    // useEffect(() => {
+    //     if (socket != null)
+    //         socket.emit("join all");
+    //
+    //     return () => {
+    //         if (socket != null)
+    //             socket.emit("leave all")
+    //     }
+    // }, [socket])
 
     useEffect(() => {
         if (socket != null) {
             const joinListener = () => {
                 dispatch(loadChannels());
             };
-            socket.on('join status', joinListener);
+            socket?.on('join status', joinListener);
 
             return () => {
-                socket.offAny(joinListener);
+                socket?.removeAllListeners();
             }
         }
     }, [socket, dispatch])
@@ -47,14 +48,14 @@ function ChannelList() {
     useEffect(() => {
         if (socket != null) {
             const leaveListener = (data: any) => {
-                if (typeof auth.user != 'boolean' && auth.user.username === data.username) {
+                if (typeof auth.user != 'boolean' && auth.user.user_id === data.user_id) {
                     dispatch(removeChannel(data.room));
                 }
             }
             socket.on('leave status', leaveListener);
 
             return () => {
-                socket.offAny(leaveListener);
+                socket?.removeAllListeners();
             }
         }
     }, [socket, auth, dispatch]);
@@ -75,7 +76,7 @@ function ChannelList() {
 
             socket.on('receive message', receiveMessageListener);
             return () => {
-                socket.offAny(receiveMessageListener);
+                socket?.removeAllListeners()
             }
         }
     }, [socket, dispatch]);
@@ -124,7 +125,7 @@ function ChannelList() {
                 channels.map((item, i) => (
                     <li key={i}>
                         <ChannelLinkCard
-                            to={`/chat/@${item.channel_id}`}
+                            to={`/chat/${item.channel_id}`}
                             channel={item.channel_name}
                             lastMessage={item.last_message ? (
                                 ((auth.isLoading || (typeof auth.user != 'boolean' && item.last_message.user !== auth.user.display_name)) ? item.last_message.user : "You")
