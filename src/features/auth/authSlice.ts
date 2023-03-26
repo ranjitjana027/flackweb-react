@@ -1,17 +1,17 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 type UserData = {
-    username: string,
+    user_id: string,
     display_name: string
 };
 
 export const autoSignin = createAsyncThunk(
     'auth/autoSignin',
     async () => {
-        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/auth`, {
+        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/profile`, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                'x-access-tokens': `${localStorage.getItem('flackwebToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('flackwebToken')}`
             }
         });
         const data: { success: boolean, user: UserData } = await response.json();
@@ -36,16 +36,21 @@ export const signin = createAsyncThunk(
         const fd = new FormData();
         fd.append("username", arg.username);
         fd.append("password", arg.password);
-        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/login`, {
+        const payload = {
+            username: arg.username,
+            password: arg.password
+        }
+        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/auth/login`, {
             method: 'POST',
             headers: {
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json'
             },
-            body: fd
+            body: JSON.stringify(payload)
         });
-        const data: { success: boolean, user: UserData, token: string } = await response.json();
+        const data: { success: boolean, user: UserData, access_token: string } = await response.json();
         if (data.success) {
-            localStorage.setItem('flackwebToken', data.token);
+            localStorage.setItem('flackwebToken', data.access_token);
             localStorage.setItem('flackwebUsername', arg.username);
             return {
                 user: data.user,
@@ -87,7 +92,7 @@ const rejected = (state: AuthState) => {
 
 type AuthState = {
     user: boolean | {
-        username: string,
+        user_id: string,
         display_name: string
     },
     status: boolean | string,

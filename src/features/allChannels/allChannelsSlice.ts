@@ -7,11 +7,11 @@ import {Message} from "../chatMessages/types";
 export const loadChannels = createAsyncThunk(
     'allChannels/loadChannels',
     async () => {
-        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/channel_list`, {
-            method: 'POST',
+        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/channels`, {
+            method: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                'x-access-tokens': `${localStorage.getItem('flackwebToken')}`
+                'Authorization': `Bearer ${localStorage.getItem('flackwebToken')}`
             }
         });
         const data = await response.json();

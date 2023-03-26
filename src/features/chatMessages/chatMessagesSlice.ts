@@ -4,19 +4,17 @@ import {ChatMessagesType, Message} from "./types";
 export const loadMessages = createAsyncThunk(
     'chatMessages/loadMessages',
     async (arg: { room: string, isChannel: boolean}, thunkAPI) => {
-        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/api/chats`, {
-            method: 'POST',
+        const response = await fetch(`${process.env.REACT_APP_API_DOMAIN}/chats/${arg.room}`, {
+            method: 'GET',
             headers: {
                 'Access-Control-Allow-Origin': '*',
-                'x-access-tokens': `${localStorage.getItem('flackwebToken')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(arg)
+                'Authorization': `Bearer ${localStorage.getItem('flackwebToken')}`
+            }
         });
         const data = await response.json();
         return {
             channel: arg.room,
-            messages: data.messageList
+            messages: data.chats
         }
     }
 )

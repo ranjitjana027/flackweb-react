@@ -14,7 +14,7 @@ export default function Profile(): JSX.Element {
                     src={UserImage}
                     alt="profile-pic"/>
                 <figcaption><b>{typeof auth.user != 'boolean' && auth.user.display_name}</b></figcaption>
-                <figcaption>{typeof auth.user != 'boolean' && auth.user.username}</figcaption>
+                {/*<figcaption>{typeof auth.user != 'boolean' && auth.user.username}</figcaption>*/}
             </figure>
         </div>
     );
